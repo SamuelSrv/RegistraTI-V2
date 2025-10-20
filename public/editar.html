@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Script Assistant - Gerenciar</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="img/icon.ico"> 
+</head>
+<body>
+    <header class="app-header">
+        <a href="index.html" class="logo">AI Script Assistant</a>
+        <button id="theme-toggle" class="theme-toggle-btn">
+            <img id="theme-icon" src="img/icon-light.png" alt="Mudar Tema"> 
+        </button>
+    </header>
+
+    <main class="container">
+        <h1>Gerenciar Modelos</h1>
+        <p>Adicione, edite ou exclua seus modelos de script. As alterações são salvas automaticamente no seu navegador.</p>
+
+        <div id="templates-list-container">
+            </div>
+
+        <section class="edit-template-section">
+            <h2>Adicionar Novo / Editar Modelo</h2>
+            <label for="templateKeyInput">Nome-Chave do Modelo (ex: "resetSenha", sem espaços):</label>
+            <input type="text" id="templateKeyInput" placeholder="resetSenha">
+
+            <label for="templateValueInput">Conteúdo do Modelo:</label>
+            <textarea id="templateValueInput" rows="10" placeholder="Use _START_VARIAVEL_ para campos dinâmicos.&#10;Ex: Prezado(a) _START_NOME_USUARIO_, ..."></textarea>
+            
+            <button id="saveTemplateBtn" class="btn-primary">Salvar Modelo</button>
+            <button id="clearFormBtn" class="btn-secondary" style="width: 100%; margin-top: 10px;">Limpar Formulário</button>
+        </section>
+
+        <div class="feedback-message" id="feedbackMessage"></div>
+    </main>
+
+    <script src="editar.js"></script>
+    <script src="theme.js"></script>

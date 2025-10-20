@@ -17,6 +17,7 @@
     --header-text: #333333;
     --feedback-success: #28a745;
     --feedback-error: #dc3545;
+    --theme-icon-invert: 0;
 }
 
 /* Variáveis para Tema Escuro */
@@ -38,11 +39,13 @@
     --header-text: #e2e8f0;
     --feedback-success: #68d391;
     --feedback-error: #fc8181;
+    --theme-icon-invert: 1;
 }
 
 /* Estilos Globais */
 body {
-    font-family: 'Inter', sans-serif; /* Fonte moderna, pode precisar ser importada */
+    /* Usando uma fonte de sistema mais moderna */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
     background-color: var(--bg-color);
     color: var(--text-color);
     margin: 0;
@@ -68,11 +71,14 @@ body {
     top: 0;
     z-index: 1000;
     transition: background-color 0.3s ease, color 0.3s ease;
+    box-sizing: border-box;
 }
 
 .logo {
     font-size: 1.5rem;
     font-weight: 700;
+    color: var(--header-text); /* Garante que a cor do logo mude com o tema */
+    text-decoration: none; /* Remove sublinhado se for um link <a> */
 }
 
 .theme-toggle-btn {
@@ -85,17 +91,16 @@ body {
 }
 
 .theme-toggle-btn:hover {
-    background-color: rgba(0, 0, 0, 0.05); /* Mais sutil */
+    background-color: rgba(0, 0, 0, 0.05);
 }
 [data-theme="dark"] .theme-toggle-btn:hover {
     background-color: rgba(255, 255, 255, 0.05);
 }
 
-
 .theme-toggle-btn img {
     width: 24px;
     height: 24px;
-    filter: invert(var(--theme-icon-invert, 0)); /* Para escurecer/clarear o ícone */
+    filter: invert(var(--theme-icon-invert));
 }
 
 /* Container Principal */
@@ -114,6 +119,7 @@ body {
 h1 {
     text-align: center;
     color: var(--text-color);
+    margin-top: 0;
     margin-bottom: 2rem;
     font-size: 2rem;
 }
@@ -154,8 +160,13 @@ textarea {
     min-height: 100px;
 }
 
+#outputScript.error-output {
+    border-color: var(--feedback-error);
+    color: var(--feedback-error);
+}
+
 /* Botões */
-.btn-primary, .btn-secondary, .btn-toggle {
+.btn-primary, .btn-secondary, .btn-toggle, .btn-delete {
     display: block;
     width: 100%;
     padding: 0.9rem 1.5rem;
@@ -166,6 +177,7 @@ textarea {
     cursor: pointer;
     transition: background-color 0.2s ease, opacity 0.2s ease;
     margin-top: 1.5rem;
+    box-sizing: border-box;
 }
 
 .btn-primary {
@@ -185,8 +197,8 @@ textarea {
 .btn-secondary {
     background-color: var(--secondary-btn-bg);
     color: white;
-    width: auto; /* Para o botão Copiar */
-    align-self: flex-end; /* Para alinhar à direita no output */
+    width: auto;
+    align-self: flex-end;
     margin-top: 1rem;
 }
 
@@ -237,13 +249,14 @@ textarea {
     flex-direction: column;
 }
 
+/* Mensagens de Feedback */
 .feedback-message {
     margin-top: 1.5rem;
     padding: 0.8rem 1rem;
     border-radius: 6px;
     font-weight: 600;
     text-align: center;
-    display: none; /* Escondido por padrão */
+    display: none;
 }
 
 .feedback-message.success {
@@ -258,7 +271,70 @@ textarea {
     border: 1px solid var(--feedback-error);
 }
 
-/* Media Queries para Responsividade */
+/* --- ESTILOS PARA A PÁGINA DE EDIÇÃO (editar.html) --- */
+
+.template-card {
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: box-shadow 0.2s ease;
+}
+
+.template-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.template-card strong {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.template-card p {
+    font-size: 0.95rem;
+    opacity: 0.8;
+    margin-bottom: 1rem;
+    /* Evita quebras de linha estranhas */
+    word-break: break-word;
+}
+
+.template-card div {
+    display: flex;
+    gap: 10px;
+}
+
+.template-card button {
+    width: auto;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 0;
+}
+
+.btn-delete {
+    background-color: var(--feedback-error);
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+.edit-template-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.edit-template-section h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* --- Responsividade --- */
 @media (max-width: 768px) {
     .app-header {
         padding: 0.8rem 1rem;
@@ -269,12 +345,13 @@ textarea {
     .container {
         padding: 1.5rem;
         margin: 1rem auto;
+        width: 90%;
     }
     h1 {
         font-size: 1.5rem;
         margin-bottom: 1.5rem;
     }
-    .btn-primary, .btn-secondary, .btn-toggle {
+    .btn-primary, .btn-secondary, .btn-toggle, .btn-delete {
         font-size: 1rem;
         padding: 0.8rem 1rem;
     }
