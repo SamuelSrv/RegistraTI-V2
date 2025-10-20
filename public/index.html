@@ -3,59 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Padroniza TI - Gerar Padrão</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Padroniza TI - Gerar Registro</title> <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" type="image/x-icon" href="img/icon.ico"> 
 </head>
 <body>
     <header class="app-header">
         <a href="index.html" class="logo">Padroniza TI</a> 
         <nav class="main-nav">
-            <a href="index.html">Gerar Padrão</a>
-            <a href="editar.html">Gerenciar Modelos</a>
+            <a href="index.html">Gerar Registro</a> <a href="editar.html">Gerenciar Modelos</a>
         </nav>
         <div class="header-actions">
             <button id="theme-toggle" class="theme-toggle-btn">
-                <img id="theme-icon" src="" alt="Mudar Tema"> 
-            </button>
+                <img id="theme-icon" src="img/modo-escuro.png" alt="Mudar Tema"> </button>
         </div>
     </header>
 
     <main class="container">
-        <h1>Gerador de Script de Encerramento</h1>
-
-        <section class="input-section">
-            <label for="mainActionInput">Qual foi a ação principal realizada?</label>
-            <textarea id="mainActionInput" rows="5" placeholder="Descreva aqui o serviço executado. Esta é a informação principal que será usada pela IA. Ex: Instalei o Office 365 na máquina nova do usuário Carlos."></textarea>
-        </section>
-
-        <section class="template-section">
-            <label for="templateSelector">Selecione um Modelo (Opcional):</label>
-            <select id="templateSelector">
-                </select>
-            <div id="dynamic-inputs-container" class="dynamic-inputs" style="display: none;"> </div>
+        <h1>Gerador de Registro Técnico</h1> <section class="input-section">
+            <label for="mainActionInput">Descreva a Ação Realizada:</label>
+            <textarea id="mainActionInput" rows="6" placeholder="Detalhe aqui o serviço executado. Ex: Instalação do Office 365 na estação de trabalho do usuário Carlos (Financeiro), conforme ticket 123456. Software ativado e Outlook configurado."></textarea>
         </section>
 
         <section class="advanced-options">
-            <button id="toggleAdvancedBtn" class="btn-toggle">Mostrar Detalhes Adicionais ▼</button>
-            <div id="advanced-options-container" class="hidden">
-                <label for="ticketNumberInput">Número do Chamado:</label>
-                <input type="text" id="ticketNumberInput" placeholder="Ex: 123456">
-
-                <label for="requesterInput">Nome do Solicitante:</label>
-                <input type="text" id="requesterInput" placeholder="Ex: Carlos Andrade">
-
-                <label for="departmentInput">Departamento do Solicitante:</label>
-                <input type="text" id="departmentInput" placeholder="Ex: Financeiro">
+             <div id="advanced-options-container"> 
+                <div class="form-row"> <div class="form-group">
+                        <label for="ticketNumberInput">Nº Chamado (Opcional):</label>
+                        <input type="text" id="ticketNumberInput" placeholder="Ex: 123456">
+                    </div>
+                    <div class="form-group">
+                        <label for="requesterInput">Solicitante (Opcional):</label>
+                        <input type="text" id="requesterInput" placeholder="Ex: Carlos Andrade">
+                    </div>
+                    <div class="form-group">
+                         <label for="departmentInput">Departamento (Opcional):</label>
+                         <input type="text" id="departmentInput" placeholder="Ex: Financeiro">
+                    </div>
+                </div>
+                 <label for="templateSelector" style="margin-top: 1rem;">Contexto/Assunto (Opcional):</label>
+                 <select id="templateSelector">
+                     </select>
             </div>
         </section>
         
-        <button id="generateBtn" class="btn-primary">Gerar Script de Encerramento</button>
+        <button id="generateBtn" class="btn-primary">Gerar Registro</button>
 
         <section class="output-section">
-            <label for="outputScript">Script Gerado (Editável):</label>
-            <textarea id="outputScript" rows="10" placeholder="Seu script gerado pela IA aparecerá aqui..." readonly></textarea>
-            <button id="copyBtn" class="btn-secondary">Copiar Script</button>
+            <label for="outputScript">Registro Gerado (Editável):</label>
+            <textarea id="outputScript" rows="12" placeholder="Seu registro técnico gerado pela IA aparecerá aqui..." readonly></textarea>
+            <button id="copyBtn" class="btn-secondary">Copiar Registro</button>
         </section>
 
         <div class="feedback-message" id="feedbackMessage"></div>

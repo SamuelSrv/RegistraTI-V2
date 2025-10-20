@@ -36,9 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function renderTemplatesList() {
         templatesListContainer.innerHTML = ''; 
         if (Object.keys(templates).length === 0) {
-            templatesListContainer.innerHTML = '<p style="text-align: center; opacity: 0.7;">Nenhum modelo personalizado salvo.</p>';
-            // Carrega os templates padrão do app.js se estiverem vazios aqui? Não, melhor não misturar.
-            // Se quiser carregar os padrões aqui, precisaria duplicar a lógica de 'loadTemplates' do app.js
+            templatesListContainer.innerHTML = '<p style="text-align: center; opacity: 0.7;">Nenhum modelo personalizado salvo. Os modelos padrão aparecerão aqui se você limpar o armazenamento do navegador.</p>';
             return;
         }
 
@@ -50,7 +48,8 @@ document.addEventListener('DOMContentLoaded', function () {
             templateName.textContent = key;
             
             const templatePreview = document.createElement('p');
-            templatePreview.textContent = templates[key].substring(0, 100) + '...';
+            // Mostra o texto do modelo, não apenas "Contexto: ..."
+            templatePreview.textContent = templates[key].substring(0, 150) + '...'; 
 
             const btnGroup = document.createElement('div');
             
@@ -78,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function editTemplate(key) {
         templateKeyInput.value = key;
-        templateValueInput.value = templates[key];
+        templateValueInput.value = templates[key]; // Carrega o conteúdo real
         templateKeyInput.readOnly = true; 
         templateValueInput.focus();
         window.scrollTo(0, document.body.scrollHeight); 
@@ -119,7 +118,6 @@ document.addEventListener('DOMContentLoaded', function () {
         templates[key] = value; 
         saveTemplates();
         showFeedback(`Modelo ${isEditing ? 'atualizado' : 'salvo'} com sucesso!`, 'success');
-        // clearForm() é chamado dentro de saveTemplates() agora
     });
 
     clearFormBtn.addEventListener('click', clearForm);

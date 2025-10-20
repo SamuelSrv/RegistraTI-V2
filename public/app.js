@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
     // --- Referências de Elementos ---
     const mainActionInput = document.getElementById('mainActionInput');
-    const templateSelector = document.getElementById('templateSelector');
-    const dynamicInputsContainer = document.getElementById('dynamic-inputs-container');
-    const toggleAdvancedBtn = document.getElementById('toggleAdvancedBtn');
-    const advancedOptionsContainer = document.getElementById('advanced-options-container');
+    const templateSelector = document.getElementById('templateSelector'); // Mantido para contexto opcional
+    //const dynamicInputsContainer = document.getElementById('dynamic-inputs-container'); // Removido do uso principal
+    //const toggleAdvancedBtn = document.getElementById('toggleAdvancedBtn'); // Removido
+    const advancedOptionsContainer = document.getElementById('advanced-options-container'); // Mantido
     const ticketNumberInput = document.getElementById('ticketNumberInput');
     const requesterInput = document.getElementById('requesterInput');
     const departmentInput = document.getElementById('departmentInput');
@@ -14,90 +14,62 @@ document.addEventListener('DOMContentLoaded', function () {
     const feedbackMessage = document.getElementById('feedbackMessage');
 
     let templates = {}; 
-    const STORAGE_KEY = 'aiScriptTemplates'; // Chave correta
+    const STORAGE_KEY = 'aiScriptTemplates';
 
     // --- Funções de Utilitário ---
 
     function loadTemplates() {
         const savedTemplates = localStorage.getItem(STORAGE_KEY);
-        // Garante que templates padrão sejam carregados se não houver nada salvo OU se o salvo estiver vazio
-        if (!savedTemplates || Object.keys(JSON.parse(savedTemplates)).length === 0) {
-            templates = {
-                instalacaoSoftware: `Prezado(a) _START_NOME_SOLICITANTE_,\n\nInformamos que a instalação do software **_START_NOME_SOFTWARE_** solicitada no chamado _START_NUMERO_CHAMADO_ foi concluída com sucesso em seu equipamento.\n\nRealizamos os seguintes procedimentos:\n_START_ACAO_PRINCIPAL_\n\nO software foi testado e está funcionando corretamente.\n\nAtenciosamente,\nEquipe de Suporte TI`,
-                resetSenhaRede: `Prezado(a) _START_NOME_SOLICITANTE_,\n\nConforme solicitado no chamado _START_NUMERO_CHAMADO_, sua senha de rede foi redefinida.\n\nSua senha temporária é: **NovaSenha123** (por favor, altere no primeiro login).\n\n_START_ACAO_PRINCIPAL_\n\nCaso necessite de ajuda adicional, estamos à disposição.\n\nAtenciosamente,\nEquipe de Suporte TI`,
-                problemaConexao: `Prezado(a) _START_NOME_SOLICITANTE_,\n\nAnalisamos o problema de conexão relatado no chamado _START_NUMERO_CHAMADO_.\n\nIdentificamos e corrigimos a falha. Detalhes:\n_START_ACAO_PRINCIPAL_\n\nA conexão foi restabelecida e testada.\n\nAtenciosamente,\nEquipe de Suporte TI`,
-                geral: `Prezado(a) _START_NOME_SOLICITANTE_,\n\nSeu chamado _START_NUMERO_CHAMADO_ foi atendido.\n\nAção realizada:\n_START_ACAO_PRINCIPAL_\n\nO chamado está sendo encerrado.\n\nAtenciosamente,\nEquipe de Suporte TI`
-            };
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(templates));
+        // Carrega salvos ou define os novos padrões
+        if (savedTemplates && Object.keys(JSON.parse(savedTemplates)).length > 0) {
+            // Se o usuário já tinha templates customizados, mantém eles
+             try {
+                templates = JSON.parse(savedTemplates);
+             } catch (e) {
+                 console.error("Erro ao carregar templates salvos:", e);
+                 // Se der erro ao carregar, usa os padrões
+                 setDefaultTemplates();
+             }
         } else {
-            templates = JSON.parse(savedTemplates);
+             setDefaultTemplates();
         }
-        // Sempre popula o seletor após carregar
         populateTemplateSelector(); 
     }
 
+    // Define os templates padrão
+    function setDefaultTemplates() {
+         templates = {
+            instalacaoSoftware: "Contexto: Instalação de Software",
+            configImpressora: "Contexto: Configuração De impressora",
+            instalacaoEstacao: "Contexto: Instalação/Configuração de Estação (Física)",
+            configRamal: "Contexto: Configuração Ramal",
+            solicitacaoEquipamento: "Contexto: Solicitação de equipamento",
+            atendimentoGenerico: "Contexto: Atendimento Geral" // Renomeado para clareza
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(templates));
+    }
+
+
     function populateTemplateSelector() {
-        templateSelector.innerHTML = '<option value="">Nenhum (usar apenas descrição)</option>';
+        templateSelector.innerHTML = '<option value="">Nenhum Contexto Específico</option>'; // Opção padrão
         if (!templates || Object.keys(templates).length === 0) {
-             console.warn("Nenhum template encontrado para popular o seletor."); // Log de aviso
-             return; // Sai se não houver templates
+             console.warn("Nenhum template/contexto encontrado.");
+             return; 
         }
         
         for (const key in templates) {
             const option = document.createElement('option');
-            option.value = key;
-            const friendlyName = key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase());
-            option.textContent = `Modelo: ${friendlyName}`;
+            option.value = key; // A chave ainda pode ser útil
+             // Usa o valor do template (o texto "Contexto: ...") como label
+            const labelText = templates[key].startsWith("Contexto: ") ? templates[key].substring(10) : key; 
+            option.textContent = labelText;
             templateSelector.appendChild(option);
         }
     }
 
-    function findTemplateVariables(text) {
-        const regex = /_START_([a-zA-Z0-9_]+)_/g;
-        const matches = [...text.matchAll(regex)];
-        const uniqueVariables = new Set(matches.map(match => match[1]));
-        return Array.from(uniqueVariables);
-    }
-
-    function renderDynamicInputs(templateKey) {
-        dynamicInputsContainer.innerHTML = ''; 
-        if (!templateKey || !templates[templateKey]) {
-            dynamicInputsContainer.style.display = 'none'; 
-            return;
-        }
-        dynamicInputsContainer.style.display = 'block'; 
-
-        const templateText = templates[templateKey];
-        const variables = findTemplateVariables(templateText);
-
-        variables.forEach(variable => {
-            const upperVar = variable.toUpperCase();
-            if (['NUMERO_CHAMADO', 'NOME_SOLICITANTE', 'DEPARTAMENTO', 'ACAO_PRINCIPAL'].includes(upperVar)) {
-                return; 
-            }
-
-            const label = document.createElement('label');
-            const friendlyName = variable.replace(/_/g, ' ').replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
-            label.textContent = friendlyName + ':';
-            label.htmlFor = `dynamic-input-${variable}`;
-
-            const isLargeInput = variable.toLowerCase().includes('acao') || variable.toLowerCase().includes('descricao');
-            const input = document.createElement(isLargeInput ? 'textarea' : 'input');
-            
-            if (!isLargeInput) {
-                input.type = 'text';
-            } else {
-                input.rows = 3; 
-            }
-
-            input.id = `dynamic-input-${variable}`;
-            input.placeholder = `Preencha ${friendlyName}...`;
-            input.classList.add('dynamic-field'); 
-
-            dynamicInputsContainer.appendChild(label);
-            dynamicInputsContainer.appendChild(input);
-        });
-    }
+    // Função não mais necessária no fluxo principal, mas pode ser útil para custom templates no futuro
+    // function findTemplateVariables(text) { ... } 
+    // function renderDynamicInputs(templateKey) { ... }
 
     function showFeedback(message, type) {
         feedbackMessage.textContent = message;
@@ -105,16 +77,15 @@ document.addEventListener('DOMContentLoaded', function () {
         feedbackMessage.style.display = 'block';
         setTimeout(() => {
             feedbackMessage.style.display = 'none';
-        }, 5000); 
+        }, 4000); // Feedback um pouco mais curto
     }
 
     // --- Lógica Principal de Geração de Script ---
 
-    // Esta função prepara os dados e chama a função que fala com a IA
     async function handleGerarScript() { 
         const mainAction = mainActionInput.value.trim();
         if (!mainAction) {
-            showFeedback('Por favor, descreva a ação principal realizada.', 'error');
+            showFeedback('Por favor, descreva a ação realizada.', 'error');
             mainActionInput.focus();
             return;
         }
@@ -124,69 +95,53 @@ document.addEventListener('DOMContentLoaded', function () {
         outputScript.value = 'Processando com IA...';
         outputScript.readOnly = true; 
         outputScript.classList.remove('error-output');
-        showFeedback('A Inteligência Artificial está trabalhando nisso...', 'success');
+        showFeedback('A Inteligência Artificial está trabalhando...', 'success'); // Mensagem mais curta
 
-        const templateKey = templateSelector.value;
-        let filledTemplateContent = "";
-        let baseTemplateText = "";
+        // Coleta apenas os dados essenciais
+        const contextKey = templateSelector.value;
+        const contextText = contextKey ? templates[contextKey] : "Nenhum contexto específico selecionado"; // Pega o texto do contexto
 
-        if (templateKey && templates[templateKey]) {
-            baseTemplateText = templates[templateKey];
-            filledTemplateContent = baseTemplateText;
-            const variables = findTemplateVariables(filledTemplateContent);
-            variables.forEach(variable => {
-                const inputElement = document.getElementById(`dynamic-input-${variable}`);
-                const value = inputElement ? inputElement.value.trim() : '';
-                const placeholder = `**[${variable.replace(/_/g,' ').toUpperCase()}]**`;
-                const regex = new RegExp(`_START_${variable}_`, 'g');
-                filledTemplateContent = filledTemplateContent.replace(regex, value || placeholder);
-            });
-        }
-
-        const advancedDetails = {
-            ticketNumber: ticketNumberInput.value.trim() || '**[Número Chamado]**',
-            requester: requesterInput.value.trim() || '**[Nome Solicitante]**',
-            department: departmentInput.value.trim() || '**[Departamento]**'
+        const details = {
+            ticketNumber: ticketNumberInput.value.trim(),
+            requester: requesterInput.value.trim(),
+            department: departmentInput.value.trim()
         };
 
-        filledTemplateContent = filledTemplateContent.replace(/_START_NUMERO_CHAMADO_/g, advancedDetails.ticketNumber);
-        filledTemplateContent = filledTemplateContent.replace(/_START_NOME_SOLICITANTE_/g, advancedDetails.requester);
-        filledTemplateContent = filledTemplateContent.replace(/_START_DEPARTAMENTO_/g, advancedDetails.department);
-        filledTemplateContent = filledTemplateContent.replace(/_START_ACAO_PRINCIPAL_/g, mainAction); 
-
-        // Chama a função que efetivamente envia para a API
-        gerarScriptComIA(mainAction, filledTemplateContent, advancedDetails); 
+        // Chama a função que envia para a API
+        gerarRegistroTecnico(mainAction, details, contextText); 
     }
 
-    // Esta função monta o prompt e envia para a API
-    async function gerarScriptComIA(mainAction, filledTemplate, advancedData) {
-        // O prompt correto está aqui
+    async function gerarRegistroTecnico(mainAction, details, contextText) {
+        // --- NOVO PROMPT PARA IA ---
         const prompt = `
-            Você é um especialista em Suporte Técnico (TI) sênior, redigindo o registro de um chamado para um sistema de tickets.
-            Sua tarefa é criar um registro profissional e completo usando as seguintes informações:
+            Você é um assistente de IA para Suporte Técnico (TI), especializado em criar registros concisos e técnicos para sistemas de chamados.
 
-            **INFORMAÇÕES DO CHAMADO (se fornecidas):**
-            - Número do Chamado: ${advancedData.ticketNumber}
-            - Solicitante: ${advancedData.requester}
-            - Departamento: ${advancedData.department}
+            **Tarefa:** Gerar um registro técnico baseado na descrição fornecida pelo analista. O registro deve ser claro, objetivo e focado nos fatos técnicos relevantes.
 
-            **DESCRIÇÃO PRINCIPAL DA AÇÃO REALIZADA (informação mais importante):**
-            ---
-            ${mainAction}
-            ---
+            **INFORMAÇÕES FORNECIDAS:**
 
-            **ESTRUTURA E CONTEXTO DO TEMPLATE (se um padrão foi usado):**
-            ---
-            ${filledTemplate || 'Nenhum padrão utilizado'}
-            ---
+            1.  **DESCRIÇÃO DO ANALISTA (Fonte Principal):**
+                ---
+                ${mainAction}
+                ---
 
-            **SUAS INSTRUÇÕES:**
-            1.  Baseie o corpo principal do seu texto na "DESCRIÇÃO PRINCIPAL DA AÇÃO REALIZADA". Esta é a fonte da verdade sobre o que foi feito.
-            2.  Incorpore as "INFORMAÇÕES DO CHAMADO" de forma natural no registro. Por exemplo, comece com uma saudação ao solicitante.
-            3.  Use a "ESTRUTURA E CONTEXTO DO TEMPLATE" principalmente para guiar a saudação inicial e a frase de encerramento, mas a descrição do serviço deve vir da "DESCRIÇÃO PRINCIPAL".
-            4.  Enriqueça o texto com detalhes técnicos plausíveis que um analista de TI teria executado.
-            5.  O resultado final deve ser apenas o texto do registro, claro, profissional e conclusivo.
+            2.  **DETALHES ADICIONAIS (Opcionais):**
+                - Nº Chamado: ${details.ticketNumber || ''} 
+                - Solicitante: ${details.requester || ''}
+                - Departamento: ${details.department || ''}
+            
+            3.  **CONTEXTO/ASSUNTO GERAL (Opcional):** ${contextText}
+
+            **INSTRUÇÕES PARA O REGISTRO:**
+
+            * **Foco:** Baseie-se **principalmente** na "DESCRIÇÃO DO ANALISTA". Reformule-a de forma técnica e concisa, se necessário, mas mantenha a essência do que foi feito.
+            * **Inclusão de Detalhes:** **SOMENTE** inclua o Nº Chamado, Solicitante ou Departamento no registro se eles foram **fornecidos** (não estão vazios). Não use placeholders como "[Não informado]". Se fornecidos, integre-os de forma natural (ex: "Atendimento ao solicitante [Nome] do depto [Depto] referente ao ticket [Numero]").
+            * **Tom Técnico:** Use linguagem técnica apropriada, mas evite jargões excessivos. Seja direto e objetivo. Não adicione saudações ou despedidas (ex: "Prezado", "Atenciosamente").
+            * **Conciso:** Evite informações redundantes ou floreios. O registro deve ser um resumo factual do atendimento.
+            * **Contexto:** Use o "CONTEXTO/ASSUNTO GERAL" apenas como uma leve indicação do tipo de atendimento, se ajudar a refinar a linguagem técnica.
+            * **Saída:** Gere APENAS o texto do registro técnico. Sem títulos, introduções ou metatexto.
         `;
+        // --- FIM DO NOVO PROMPT ---
 
         try {
             const response = await fetch('/api/generate', {
@@ -201,62 +156,50 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             const data = await response.json();
-            outputScript.value = data.text;
-            outputScript.readOnly = false;
-            showFeedback('Script gerado com sucesso! Você pode editá-lo abaixo.', 'success');
+            outputScript.value = data.text; // Coloca o resultado no campo
+            outputScript.readOnly = false; // Permite edição
+            showFeedback('Registro gerado com sucesso! Você pode editá-lo.', 'success');
 
         } catch (error) {
             console.error('Erro ao chamar a API:', error);
-            outputScript.value = `Erro ao gerar script: ${error.message}`;
+            outputScript.value = `Erro ao gerar registro: ${error.message}`;
             outputScript.classList.add('error-output');
             outputScript.readOnly = true; 
             showFeedback(`Erro: ${error.message}`, 'error');
 
         } finally {
             generateBtn.disabled = false;
-            generateBtn.textContent = 'Gerar Script de Encerramento';
+            generateBtn.textContent = 'Gerar Registro'; // Nome do botão ajustado
         }
     }
 
     // --- Event Listeners e Inicialização ---
-    templateSelector.addEventListener('change', (event) => {
-        renderDynamicInputs(event.target.value);
-    });
+    // Removido o listener para renderizar inputs dinâmicos, pois não são mais o foco
+    // templateSelector.addEventListener('change', ...); 
 
-    toggleAdvancedBtn.addEventListener('click', () => {
-        const isHidden = advancedOptionsContainer.classList.contains('hidden');
-        if (isHidden) {
-            advancedOptionsContainer.classList.remove('hidden');
-            toggleAdvancedBtn.textContent = 'Ocultar Detalhes Adicionais ▲';
-        } else {
-            advancedOptionsContainer.classList.add('hidden');
-            toggleAdvancedBtn.textContent = 'Mostrar Detalhes Adicionais ▼';
-        }
-    });
+    // Removido o listener do botão toggleAdvancedBtn
+    // toggleAdvancedBtn.addEventListener('click', ...);
 
-    // O event listener para o botão de gerar está aqui
-    generateBtn.addEventListener('click', handleGerarScript); 
+    generateBtn.addEventListener('click', handleGerarScript); // Chama a função correta
 
     copyBtn.addEventListener('click', () => {
         if (outputScript.value && !outputScript.readOnly) {
             navigator.clipboard.writeText(outputScript.value).then(() => {
-                showFeedback('Script copiado para a área de transferência!', 'success');
+                showFeedback('Registro copiado!', 'success'); // Mensagem mais curta
             }).catch(err => {
-                console.error('Falha ao copiar o texto: ', err);
-                showFeedback('Falha ao copiar o script. Tente copiar manualmente.', 'error');
+                console.error('Falha ao copiar: ', err);
+                showFeedback('Falha ao copiar. Tente manualmente.', 'error');
             });
         } else if (outputScript.readOnly){
-             showFeedback('Não é possível copiar um script com erro.', 'error');
+             showFeedback('Não é possível copiar um registro com erro.', 'error');
         } else {
-            showFeedback('Não há script para copiar!', 'error');
+            showFeedback('Não há registro para copiar.', 'error');
         }
     });
 
-    // Função de inicialização
     function init() {
-        loadTemplates(); // Carrega e popula os templates
-        renderDynamicInputs(templateSelector.value); // Renderiza inputs se um template já estiver selecionado
+        loadTemplates(); // Carrega e popula templates/contextos
     }
 
-    init(); // Chama a inicialização
+    init(); 
 });
