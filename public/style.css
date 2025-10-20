@@ -17,7 +17,9 @@
     --header-text: #333333;
     --feedback-success: #28a745;
     --feedback-error: #dc3545;
-    --theme-icon-invert: 0;
+    --theme-icon-invert: 0; /* Não inverte no claro */
+    --delete-btn-bg: #dc3545;
+    --delete-btn-hover: #c82333;
 }
 
 /* Variáveis para Tema Escuro */
@@ -39,12 +41,13 @@
     --header-text: #e2e8f0;
     --feedback-success: #68d391;
     --feedback-error: #fc8181;
-    --theme-icon-invert: 1;
+    --theme-icon-invert: 1; /* Inverte (branco) no escuro */
+    --delete-btn-bg: #e53e3e;
+    --delete-btn-hover: #c53030;
 }
 
 /* Estilos Globais */
 body {
-    /* Usando uma fonte de sistema mais moderna */
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
     background-color: var(--bg-color);
     color: var(--text-color);
@@ -62,8 +65,8 @@ body {
     width: 100%;
     background-color: var(--header-bg);
     color: var(--header-text);
-    padding: 1rem 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 0.8rem 1.5rem; /* Reduzido um pouco */
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); /* Mais sutil */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -75,19 +78,49 @@ body {
 }
 
 .logo {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--header-text); /* Garante que a cor do logo mude com o tema */
-    text-decoration: none; /* Remove sublinhado se for um link <a> */
+    font-size: 1.4rem; /* Um pouco menor */
+    font-weight: 600; /* Menos bold */
+    color: var(--header-text);
+    text-decoration: none;
+}
+
+/* Menu de Navegação no Header */
+.main-nav {
+    display: flex;
+    gap: 15px; /* Espaço entre links */
+    flex-grow: 1; /* Ocupa espaço disponível */
+    justify-content: center; /* Centraliza os links */
+    margin-left: -80px; /* Ajuste fino para centralizar melhor com logo e botão */
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: var(--label-color);
+    font-weight: 500; /* Menos bold */
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.main-nav a:hover {
+    background-color: var(--bg-color);
+    color: var(--link-color);
+}
+
+.header-actions {
+    /* Mantém o botão de tema à direita */
 }
 
 .theme-toggle-btn {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0.5rem;
+    padding: 0.4rem; /* Menor padding */
     border-radius: 50%;
     transition: background-color 0.2s ease;
+    display: flex; /* Para centralizar o img */
+    align-items: center;
+    justify-content: center;
 }
 
 .theme-toggle-btn:hover {
@@ -98,8 +131,8 @@ body {
 }
 
 .theme-toggle-btn img {
-    width: 24px;
-    height: 24px;
+    width: 22px; /* Ícone um pouco menor */
+    height: 22px;
     filter: invert(var(--theme-icon-invert));
 }
 
@@ -107,11 +140,11 @@ body {
 .container {
     background-color: var(--container-bg-color);
     border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    padding: 2.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); /* Sombra mais sutil */
+    padding: 2rem; /* Padding ligeiramente menor */
     margin: 2rem auto;
-    max-width: 800px;
-    width: 95%;
+    max-width: 750px; /* Um pouco mais estreito */
+    width: 90%; /* Responsividade */
     box-sizing: border-box;
     transition: background-color 0.3s ease;
 }
@@ -121,30 +154,31 @@ h1 {
     color: var(--text-color);
     margin-top: 0;
     margin-bottom: 2rem;
-    font-size: 2rem;
+    font-size: 1.8rem; /* Título um pouco menor */
 }
 
 /* Inputs e Textareas */
 label {
     display: block;
     margin-bottom: 0.5rem;
-    font-weight: 600;
+    font-weight: 500; /* Menos bold */
     color: var(--label-color);
+    font-size: 0.95rem; /* Fonte da label menor */
 }
 
 input[type="text"],
 select,
 textarea {
     width: 100%;
-    padding: 0.8rem 1rem;
+    padding: 0.7rem 0.9rem; /* Padding interno menor */
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: 5px; /* Bordas menos arredondadas */
     background-color: var(--input-bg-color);
     color: var(--text-color);
     font-size: 1rem;
     box-sizing: border-box;
     margin-bottom: 1.5rem;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
+    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 input[type="text"]:focus,
@@ -152,12 +186,24 @@ select:focus,
 textarea:focus {
     outline: none;
     border-color: var(--input-border-focus);
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2); /* Sombra de foco mais sutil */
 }
 
 textarea {
     resize: vertical;
-    min-height: 100px;
+    min-height: 80px; /* Altura mínima menor */
+}
+
+#mainActionInput {
+    min-height: 100px; /* Campo principal um pouco maior */
+    max-height: 250px;
+}
+
+#outputScript {
+    min-height: 150px; /* Campo de saída maior */
+    max-height: 400px;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace; /* Fonte monoespaçada */
+    font-size: 0.9rem; /* Fonte menor para mais texto */
 }
 
 #outputScript.error-output {
@@ -169,20 +215,22 @@ textarea {
 .btn-primary, .btn-secondary, .btn-toggle, .btn-delete {
     display: block;
     width: 100%;
-    padding: 0.9rem 1.5rem;
+    padding: 0.8rem 1.2rem; /* Padding ligeiramente menor */
     border: none;
-    border-radius: 6px;
-    font-size: 1.1rem;
-    font-weight: 700;
+    border-radius: 5px;
+    font-size: 1rem; /* Fonte menor */
+    font-weight: 600; /* Menos bold */
     cursor: pointer;
     transition: background-color 0.2s ease, opacity 0.2s ease;
-    margin-top: 1.5rem;
+    margin-top: 1rem; /* Margem padrão menor */
     box-sizing: border-box;
+    text-align: center;
 }
 
 .btn-primary {
     background-color: var(--primary-btn-bg);
     color: white;
+    margin-top: 1.5rem; /* Botão principal com mais espaço acima */
 }
 
 .btn-primary:hover {
@@ -197,9 +245,7 @@ textarea {
 .btn-secondary {
     background-color: var(--secondary-btn-bg);
     color: white;
-    width: auto;
-    align-self: flex-end;
-    margin-top: 1rem;
+    width: auto; /* Mantém auto para botões como Copiar */
 }
 
 .btn-secondary:hover {
@@ -209,8 +255,9 @@ textarea {
 .btn-toggle {
     background-color: var(--toggle-btn-bg);
     color: var(--text-color);
-    font-weight: 600;
+    font-weight: 500;
     border: 1px solid var(--border-color);
+    margin-top: 1rem; /* Reduz espaço acima do botão toggle */
 }
 
 .btn-toggle:hover {
@@ -219,44 +266,72 @@ textarea {
 
 /* Seções */
 .input-section, .template-section, .advanced-options, .output-section {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem; /* Reduz espaço entre seções */
+}
+
+.template-section select {
+     margin-bottom: 0.5rem; /* Menos espaço abaixo do select */
 }
 
 .dynamic-inputs {
-    margin-top: 1.5rem;
-    padding: 1rem;
+    margin-top: 1rem; /* Menos espaço acima dos inputs dinâmicos */
+    padding: 0.8rem; /* Padding interno menor */
     background-color: var(--bg-color);
-    border-radius: 6px;
+    border-radius: 5px;
     border: 1px solid var(--border-color);
 }
 
 .dynamic-inputs label {
-    font-size: 0.95rem;
-    margin-top: 1rem;
+    font-size: 0.9rem;
+    margin-top: 0.8rem;
 }
 
 .dynamic-inputs input,
 .dynamic-inputs textarea {
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.5rem; /* Menos espaço abaixo dos inputs dinâmicos */
+    font-size: 0.95rem; /* Fonte um pouco menor */
 }
 
 .hidden {
     display: none;
 }
 
+#advanced-options-container {
+     padding: 1rem 1.5rem; /* Padding interno */
+     margin-top: 0.5rem; /* Menos espaço acima */
+     background-color: var(--bg-color);
+     border-radius: 5px;
+     border: 1px solid var(--border-color); /* Borda sutil */
+}
+#advanced-options-container label {
+    margin-top: 0.8rem; /* Menos espaço acima das labels */
+}
+#advanced-options-container input {
+    margin-bottom: 0.8rem; /* Menos espaço abaixo dos inputs */
+}
+
 .output-section {
     display: flex;
     flex-direction: column;
+    margin-top: 2rem; /* Mais espaço antes da saída */
+}
+.output-section label {
+    margin-bottom: 0.5rem;
+}
+.output-section .btn-secondary { /* Botão Copiar */
+    align-self: flex-end; /* Alinha à direita */
+    margin-top: 0.8rem; /* Menos espaço acima */
 }
 
 /* Mensagens de Feedback */
 .feedback-message {
-    margin-top: 1.5rem;
-    padding: 0.8rem 1rem;
-    border-radius: 6px;
-    font-weight: 600;
+    margin-top: 1rem;
+    padding: 0.7rem 1rem;
+    border-radius: 5px;
+    font-weight: 500;
     text-align: center;
     display: none;
+    font-size: 0.95rem;
 }
 
 .feedback-message.success {
@@ -276,72 +351,101 @@ textarea {
 .template-card {
     background-color: var(--bg-color);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 1.5rem;
+    border-radius: 6px; /* Bordas um pouco mais suaves */
+    padding: 1rem 1.5rem; /* Padding interno */
     margin-bottom: 1rem;
     transition: box-shadow 0.2s ease;
 }
 
 .template-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .template-card strong {
-    font-size: 1.2rem;
+    font-size: 1.1rem; /* Nome do template um pouco menor */
     color: var(--text-color);
     display: block;
     margin-bottom: 0.5rem;
 }
 
 .template-card p {
-    font-size: 0.95rem;
-    opacity: 0.8;
+    font-size: 0.9rem; /* Preview menor */
+    opacity: 0.7; /* Mais suave */
     margin-bottom: 1rem;
-    /* Evita quebras de linha estranhas */
     word-break: break-word;
+    line-height: 1.4; /* Melhora leitura */
 }
 
-.template-card div {
+.template-card div { /* Container dos botões Editar/Excluir */
     display: flex;
     gap: 10px;
+    justify-content: flex-end; /* Alinha botões à direita */
 }
 
-.template-card button {
+.template-card button { /* Estilo base para botões no card */
     width: auto;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem; /* Botões menores */
+    font-size: 0.85rem;
     font-weight: 600;
     margin-top: 0;
 }
 
 .btn-delete {
-    background-color: var(--feedback-error);
+    background-color: var(--delete-btn-bg);
     color: white;
 }
 
 .btn-delete:hover {
-    background-color: #c82333;
+    background-color: var(--delete-btn-hover);
 }
 
 .edit-template-section {
-    margin-top: 3rem;
-    padding-top: 2rem;
+    margin-top: 2.5rem; /* Mais espaço antes do formulário */
+    padding-top: 1.5rem;
     border-top: 1px solid var(--border-color);
 }
 
 .edit-template-section h2 {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem; /* Título menor */
 }
+
+/* Animação de giro para o ícone de tema */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.spin-animation {
+    animation: spin 0.5s ease-out forwards;
+}
+
 
 /* --- Responsividade --- */
 @media (max-width: 768px) {
     .app-header {
         padding: 0.8rem 1rem;
+        flex-wrap: wrap; /* Permite quebra de linha se necessário */
     }
     .logo {
         font-size: 1.2rem;
+        flex-basis: 100%; /* Ocupa linha inteira */
+        text-align: center; /* Centraliza logo */
+        margin-bottom: 0.5rem; /* Espaço abaixo do logo */
     }
+     .main-nav {
+         order: 3; /* Coloca menu abaixo */
+         flex-basis: 100%; /* Ocupa linha inteira */
+         justify-content: center; /* Centraliza */
+         margin-left: 0; /* Reseta ajuste */
+         margin-top: 0.5rem; /* Espaço acima do menu */
+     }
+    .header-actions {
+        position: absolute; /* Tira do fluxo normal */
+        top: 0.8rem; /* Alinha com o topo do header */
+        right: 1rem; /* Alinha à direita */
+    }
+
     .container {
         padding: 1.5rem;
         margin: 1rem auto;
@@ -355,4 +459,12 @@ textarea {
         font-size: 1rem;
         padding: 0.8rem 1rem;
     }
+     .template-card div {
+         flex-direction: column; /* Botões um abaixo do outro */
+         align-items: flex-end; /* Alinha à direita */
+     }
+     .template-card button {
+         width: 100px; /* Largura fixa para melhor toque */
+         text-align: center;
+     }
 }

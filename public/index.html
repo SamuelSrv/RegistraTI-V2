@@ -3,30 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Script Assistant</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" type="image/x-icon" href="img/icon.ico"> </head>
+    <title>Padroniza TI - Gerar Padrão</title> <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="img/icon.ico"> 
+</head>
 <body>
     <header class="app-header">
-        <div class="logo">AI Script Assistant</div>
-        <button id="theme-toggle" class="theme-toggle-btn">
-            <img id="theme-icon" src="img/modo-escuro.png" alt="Mudar Tema"> </button>
+        <a href="index.html" class="logo">Padroniza TI</a> 
+        <nav class="main-nav">
+             <a href="index.html">Gerar Padrão</a>
+            <a href="editar.html">Gerenciar Modelos</a>
+        </nav>
+        <div class="header-actions">
+            <button id="theme-toggle" class="theme-toggle-btn">
+                <img id="theme-icon" src="" alt="Mudar Tema"> 
+            </button>
+        </div>
     </header>
 
     <main class="container">
-        <h1>Gerar Novo Script</h1>
+        <h1>Gerador de Script de Encerramento</h1>
 
         <section class="input-section">
-            <label for="mainActionInput">Descreva a Ação Principal Realizada:</label>
-            <textarea id="mainActionInput" rows="6" placeholder="Ex: 'Configurei o acesso VPN para o novo colaborador João Silva do departamento de Vendas. Os dados de acesso foram enviados por e-mail.'"></textarea>
+            <label for="mainActionInput">Qual foi a ação principal realizada?</label>
+            <textarea id="mainActionInput" rows="5" placeholder="Descreva aqui o serviço executado. Esta é a informação principal que será usada pela IA. Ex: Instalei o Office 365 na máquina nova do usuário Carlos."></textarea>
         </section>
 
         <section class="template-section">
             <label for="templateSelector">Selecione um Modelo (Opcional):</label>
             <select id="templateSelector">
-                <option value="">Nenhum (gerar livremente)</option>
                 </select>
-            <div id="dynamic-inputs-container" class="dynamic-inputs"></div>
+            <div id="dynamic-inputs-container" class="dynamic-inputs">
+                </div>
         </section>
 
         <section class="advanced-options">
@@ -36,10 +43,10 @@
                 <input type="text" id="ticketNumberInput" placeholder="Ex: 123456">
 
                 <label for="requesterInput">Nome do Solicitante:</label>
-                <input type="text" id="requesterInput" placeholder="Ex: João Silva">
+                <input type="text" id="requesterInput" placeholder="Ex: Carlos Andrade">
 
                 <label for="departmentInput">Departamento do Solicitante:</label>
-                <input type="text" id="departmentInput" placeholder="Ex: Vendas">
+                <input type="text" id="departmentInput" placeholder="Ex: Financeiro">
             </div>
         </section>
         
@@ -47,7 +54,7 @@
 
         <section class="output-section">
             <label for="outputScript">Script Gerado (Editável):</label>
-            <textarea id="outputScript" rows="10" placeholder="Seu script gerado pela IA aparecerá aqui..." readonly></textarea>
+            <textarea id="outputScript" rows="10" placeholder="Seu script gerado pela IA aparecerá aqui..."></textarea>
             <button id="copyBtn" class="btn-secondary">Copiar Script</button>
         </section>
 
