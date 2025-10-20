@@ -3,8 +3,8 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 // Inicializa o cliente FORA do handler
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 // Define o modelo globalmente
-// MUDANÇA AQUI: Voltando para 'gemini-pro' no projeto novo
-const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+// MUDANÇA AQUI: Usando o nome exato da sua lista!
+const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
 exports.handler = async function(event, context) {
     if (event.httpMethod !== 'POST') {
