@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const feedbackMessage = document.getElementById('feedbackMessage');
 
     let templates = {};
-    const STORAGE_KEY = 'aiScriptTemplates'; // Chave do localStorage
+    const STORAGE_KEY = 'aiScriptTemplates'; // <<< GARANTINDO QUE USA A MESMA CHAVE DO app.js
 
     // --- Funções ---
 
@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function saveTemplates() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(templates));
         loadTemplates(); // Recarrega a lista para mostrar as mudanças
+        clearForm(); // Limpa o formulário após salvar
     }
 
     // Desenha os cards de templates na tela
@@ -49,12 +50,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const templateName = document.createElement('strong');
             templateName.textContent = key;
-            
+
             const templatePreview = document.createElement('p');
             templatePreview.textContent = templates[key].substring(0, 100) + '...';
 
             const btnGroup = document.createElement('div');
-            
+
             const editBtn = document.createElement('button');
             editBtn.textContent = 'Editar';
             editBtn.className = 'btn-secondary';
@@ -66,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
             deleteBtn.className = 'btn-delete'; // Estilizado no style.css
             deleteBtn.style.width = 'auto'; // Ajuste para botões menores
             deleteBtn.onclick = () => deleteTemplate(key);
-            
+
             btnGroup.appendChild(editBtn);
             btnGroup.appendChild(deleteBtn);
             templateCard.appendChild(templateName);
@@ -90,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function deleteTemplate(key) {
         if (confirm(`Tem certeza que deseja excluir o modelo "${key}"?`)) {
             delete templates[key];
-            saveTemplates();
+            saveTemplates(); // Salva a remoção
             showFeedback('Modelo excluído com sucesso!', 'success');
         }
     }
@@ -121,10 +122,11 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        const isEditing = templateKeyInput.readOnly; // Verifica se está editando
         templates[key] = value; // Adiciona ou sobrescreve o modelo
         saveTemplates();
-        showFeedback('Modelo salvo com sucesso!', 'success');
-        clearForm();
+        showFeedback(`Modelo ${isEditing ? 'atualizado' : 'salvo'} com sucesso!`, 'success');
+        // clearForm() é chamado dentro de saveTemplates() agora
     });
 
     // Botão de Limpar
