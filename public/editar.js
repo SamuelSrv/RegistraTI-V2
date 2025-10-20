@@ -8,11 +8,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const feedbackMessage = document.getElementById('feedbackMessage');
 
     let templates = {};
-    const STORAGE_KEY = 'aiScriptTemplates'; // <<< GARANTINDO QUE USA A MESMA CHAVE DO app.js
+    const STORAGE_KEY = 'aiScriptTemplates'; // <<< Chave correta
 
     // --- Funções ---
 
-    // Exibe feedback para o usuário (sucesso/erro)
     function showFeedback(message, type) {
         feedbackMessage.textContent = message;
         feedbackMessage.className = `feedback-message ${type}`;
@@ -22,52 +21,51 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 3000);
     }
 
-    // Carrega templates do localStorage
     function loadTemplates() {
         const savedTemplates = localStorage.getItem(STORAGE_KEY);
         templates = savedTemplates ? JSON.parse(savedTemplates) : {};
         renderTemplatesList();
     }
 
-    // Salva os templates no localStorage
     function saveTemplates() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(templates));
-        loadTemplates(); // Recarrega a lista para mostrar as mudanças
-        clearForm(); // Limpa o formulário após salvar
+        loadTemplates(); 
+        clearForm(); 
     }
 
-    // Desenha os cards de templates na tela
     function renderTemplatesList() {
-        templatesListContainer.innerHTML = ''; // Limpa a lista antiga
+        templatesListContainer.innerHTML = ''; 
         if (Object.keys(templates).length === 0) {
             templatesListContainer.innerHTML = '<p style="text-align: center; opacity: 0.7;">Nenhum modelo personalizado salvo.</p>';
+            // Carrega os templates padrão do app.js se estiverem vazios aqui? Não, melhor não misturar.
+            // Se quiser carregar os padrões aqui, precisaria duplicar a lógica de 'loadTemplates' do app.js
             return;
         }
 
         for (const key in templates) {
             const templateCard = document.createElement('div');
-            templateCard.className = 'template-card'; // Estilizado no style.css
+            templateCard.className = 'template-card'; 
 
             const templateName = document.createElement('strong');
             templateName.textContent = key;
-
+            
             const templatePreview = document.createElement('p');
             templatePreview.textContent = templates[key].substring(0, 100) + '...';
 
             const btnGroup = document.createElement('div');
-
+            
             const editBtn = document.createElement('button');
             editBtn.textContent = 'Editar';
             editBtn.className = 'btn-secondary';
-            editBtn.style.width = 'auto'; // Ajuste para botões menores
+            editBtn.style.width = 'auto'; 
             editBtn.onclick = () => editTemplate(key);
 
             const deleteBtn = document.createElement('button');
             deleteBtn.textContent = 'Excluir';
-            deleteBtn.className = 'btn-delete'; // Estilizado no style.css
-            deleteBtn.style.width = 'auto'; // Ajuste para botões menores
+            deleteBtn.className = 'btn-delete'; 
+            deleteBtn.style.width = 'auto'; 
             deleteBtn.onclick = () => deleteTemplate(key);
-
+            
             btnGroup.appendChild(editBtn);
             btnGroup.appendChild(deleteBtn);
             templateCard.appendChild(templateName);
@@ -78,25 +76,22 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Preenche o formulário para edição
     function editTemplate(key) {
         templateKeyInput.value = key;
         templateValueInput.value = templates[key];
-        templateKeyInput.readOnly = true; // Impede a edição da chave (nome)
+        templateKeyInput.readOnly = true; 
         templateValueInput.focus();
-        window.scrollTo(0, document.body.scrollHeight); // Rola para o final da página
+        window.scrollTo(0, document.body.scrollHeight); 
     }
 
-    // Deleta um template
     function deleteTemplate(key) {
         if (confirm(`Tem certeza que deseja excluir o modelo "${key}"?`)) {
             delete templates[key];
-            saveTemplates(); // Salva a remoção
+            saveTemplates(); 
             showFeedback('Modelo excluído com sucesso!', 'success');
         }
     }
 
-    // Limpa o formulário de edição
     function clearForm() {
         templateKeyInput.value = '';
         templateValueInput.value = '';
@@ -106,7 +101,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- Event Listeners ---
 
-    // Botão de Salvar
     saveTemplateBtn.addEventListener('click', () => {
         const key = templateKeyInput.value.trim();
         const value = templateValueInput.value.trim();
@@ -116,20 +110,18 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Validação simples para a chave (sem espaços ou caracteres especiais)
         if (key.includes(' ') || !/^[a-zA-Z0-9]+$/.test(key)) {
             showFeedback('O Nome-Chave deve conter apenas letras e números, sem espaços.', 'error');
             return;
         }
 
-        const isEditing = templateKeyInput.readOnly; // Verifica se está editando
-        templates[key] = value; // Adiciona ou sobrescreve o modelo
+        const isEditing = templateKeyInput.readOnly; 
+        templates[key] = value; 
         saveTemplates();
         showFeedback(`Modelo ${isEditing ? 'atualizado' : 'salvo'} com sucesso!`, 'success');
         // clearForm() é chamado dentro de saveTemplates() agora
     });
 
-    // Botão de Limpar
     clearFormBtn.addEventListener('click', clearForm);
 
     // Inicialização

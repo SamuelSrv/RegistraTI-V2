@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Padroniza TI - Gerar Padrão</title> <link rel="stylesheet" href="style.css">
+    <title>Padroniza TI - Gerar Padrão</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" type="image/x-icon" href="img/icon.ico"> 
 </head>
 <body>
     <header class="app-header">
         <a href="index.html" class="logo">Padroniza TI</a> 
         <nav class="main-nav">
-             <a href="index.html">Gerar Padrão</a>
+            <a href="index.html">Gerar Padrão</a>
             <a href="editar.html">Gerenciar Modelos</a>
         </nav>
         <div class="header-actions">
@@ -32,8 +33,7 @@
             <label for="templateSelector">Selecione um Modelo (Opcional):</label>
             <select id="templateSelector">
                 </select>
-            <div id="dynamic-inputs-container" class="dynamic-inputs">
-                </div>
+            <div id="dynamic-inputs-container" class="dynamic-inputs" style="display: none;"> </div>
         </section>
 
         <section class="advanced-options">
@@ -54,7 +54,7 @@
 
         <section class="output-section">
             <label for="outputScript">Script Gerado (Editável):</label>
-            <textarea id="outputScript" rows="10" placeholder="Seu script gerado pela IA aparecerá aqui..."></textarea>
+            <textarea id="outputScript" rows="10" placeholder="Seu script gerado pela IA aparecerá aqui..." readonly></textarea>
             <button id="copyBtn" class="btn-secondary">Copiar Script</button>
         </section>
 
