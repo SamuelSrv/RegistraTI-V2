@@ -1,0 +1,13 @@
+# Configuração principal de build
+[build]
+  # Onde o Netlify encontra seu site (index.html, css, js)
+  publish = "public"
+
+  # Onde o Netlify encontra suas funções de backend
+  functions = "netlify/functions"
+
+# Regra de redirecionamento para a API
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
