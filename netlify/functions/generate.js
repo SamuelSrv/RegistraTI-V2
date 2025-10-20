@@ -1,6 +1,6 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
-// Inicializa o cliente FORA do handler para reutilização em cold starts
+// Inicializa o cliente FORA do handler para reutilização
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 // Define o modelo globalmente para o Flash
 const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
@@ -28,19 +28,13 @@ exports.handler = async function(event, context) {
         };
 
     } catch (error) {
-        // Melhor tratamento de erro para logs
+        // Bloco catch original (sem o ReferenceError)
         console.error('Erro na função Netlify:', error);
         
-        let errorMessage = 'Ocorreu um erro desconhecido ao processar sua solicitação.';
-        if (error instanceof GoogleGenerativeAIFetchError) {
-             errorMessage = `Erro da API Google (${error.status}): ${error.message}`;
-        } else if (error.message) {
-            errorMessage = `Erro interno: ${error.message}`;
-        }
-
+        // Mensagem de erro genérica, mas agora o log deve funcionar
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: errorMessage }),
+            body: JSON.stringify({ error: 'Ocorreu um erro ao processar sua solicitação.' }),
         };
     }
 };
