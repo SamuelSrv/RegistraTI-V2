@@ -1,9 +1,10 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
-// Inicializa o cliente FORA do handler para reutilização
+// Inicializa o cliente FORA do handler
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-// Define o modelo globalmente para o Flash
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+// Define o modelo globalmente
+// MUDANÇA AQUI: Voltando para 'gemini-pro' no projeto novo
+const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
 exports.handler = async function(event, context) {
     if (event.httpMethod !== 'POST') {
@@ -28,10 +29,7 @@ exports.handler = async function(event, context) {
         };
 
     } catch (error) {
-        // Bloco catch original (sem o ReferenceError)
         console.error('Erro na função Netlify:', error);
-        
-        // Mensagem de erro genérica, mas agora o log deve funcionar
         return {
             statusCode: 500,
             body: JSON.stringify({ error: 'Ocorreu um erro ao processar sua solicitação.' }),
