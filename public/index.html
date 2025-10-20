@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Script Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="img/icon.ico"> </head>
+<body>
+    <header class="app-header">
+        <div class="logo">AI Script Assistant</div>
+        <button id="theme-toggle" class="theme-toggle-btn">
+            <img id="theme-icon" src="img/icon-light.png" alt="Mudar Tema"> </button>
+    </header>
+
+    <main class="container">
+        <h1>Gerar Novo Script</h1>
+
+        <section class="input-section">
+            <label for="mainActionInput">Descreva a Ação Principal Realizada:</label>
+            <textarea id="mainActionInput" rows="6" placeholder="Ex: 'Configurei o acesso VPN para o novo colaborador João Silva do departamento de Vendas. Os dados de acesso foram enviados por e-mail.'"></textarea>
+        </section>
+
+        <section class="template-section">
+            <label for="templateSelector">Selecione um Modelo (Opcional):</label>
+            <select id="templateSelector">
+                <option value="">Nenhum (gerar livremente)</option>
+                </select>
+            <div id="dynamic-inputs-container" class="dynamic-inputs"></div>
+        </section>
+
+        <section class="advanced-options">
+            <button id="toggleAdvancedBtn" class="btn-toggle">Mostrar Detalhes Adicionais ▼</button>
+            <div id="advanced-options-container" class="hidden">
+                <label for="ticketNumberInput">Número do Chamado:</label>
+                <input type="text" id="ticketNumberInput" placeholder="Ex: 123456">
+
+                <label for="requesterInput">Nome do Solicitante:</label>
+                <input type="text" id="requesterInput" placeholder="Ex: João Silva">
+
+                <label for="departmentInput">Departamento do Solicitante:</label>
+                <input type="text" id="departmentInput" placeholder="Ex: Vendas">
+            </div>
+        </section>
+        
+        <button id="generateBtn" class="btn-primary">Gerar Script de Encerramento</button>
+
+        <section class="output-section">
+            <label for="outputScript">Script Gerado (Editável):</label>
+            <textarea id="outputScript" rows="10" placeholder="Seu script gerado pela IA aparecerá aqui..." readonly></textarea>
+            <button id="copyBtn" class="btn-secondary">Copiar Script</button>
+        </section>
+
+        <div class="feedback-message" id="feedbackMessage"></div>
+    </main>
+
+    <script src="app.js"></script>
+    <script src="theme.js"></script>
+</body>
+</html>

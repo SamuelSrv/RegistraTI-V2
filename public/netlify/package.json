@@ -1,0 +1,16 @@
+{
+  "name": "ai-script-assistant",
+  "version": "1.0.0",
+  "description": "Um assistente de IA para gerar scripts de suporte técnico.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["ai", "gemini", "script", "support", "netlify"],
+  "author": "Seu Nome",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "latest",
+    "dotenv": "^16.4.5"
+  }
+}

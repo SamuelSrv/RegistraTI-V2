@@ -1,0 +1,281 @@
+/* Variáveis para Tema Claro */
+:root {
+    --bg-color: #f4f6f8;
+    --container-bg-color: #ffffff;
+    --text-color: #333333;
+    --label-color: #555555;
+    --border-color: #e0e0e0;
+    --input-bg-color: #ffffff;
+    --input-border-focus: #88bfff;
+    --primary-btn-bg: #007bff;
+    --primary-btn-hover: #0056b3;
+    --secondary-btn-bg: #6c757d;
+    --secondary-btn-hover: #5a6268;
+    --toggle-btn-bg: #f0f0f0;
+    --toggle-btn-hover: #e0e0e0;
+    --header-bg: #ffffff;
+    --header-text: #333333;
+    --feedback-success: #28a745;
+    --feedback-error: #dc3545;
+}
+
+/* Variáveis para Tema Escuro */
+[data-theme="dark"] {
+    --bg-color: #1a202c;
+    --container-bg-color: #2d3748;
+    --text-color: #e2e8f0;
+    --label-color: #cbd5e0;
+    --border-color: #4a5568;
+    --input-bg-color: #4a5568;
+    --input-border-focus: #63b3ed;
+    --primary-btn-bg: #4299e1;
+    --primary-btn-hover: #3182ce;
+    --secondary-btn-bg: #718096;
+    --secondary-btn-hover: #5a6268;
+    --toggle-btn-bg: #4a5568;
+    --toggle-btn-hover: #3c4556;
+    --header-bg: #2d3748;
+    --header-text: #e2e8f0;
+    --feedback-success: #68d391;
+    --feedback-error: #fc8181;
+}
+
+/* Estilos Globais */
+body {
+    font-family: 'Inter', sans-serif; /* Fonte moderna, pode precisar ser importada */
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Header */
+.app-header {
+    width: 100%;
+    background-color: var(--header-bg);
+    color: var(--header-text);
+    padding: 1rem 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.theme-toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05); /* Mais sutil */
+}
+[data-theme="dark"] .theme-toggle-btn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+
+.theme-toggle-btn img {
+    width: 24px;
+    height: 24px;
+    filter: invert(var(--theme-icon-invert, 0)); /* Para escurecer/clarear o ícone */
+}
+
+/* Container Principal */
+.container {
+    background-color: var(--container-bg-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    margin: 2rem auto;
+    max-width: 800px;
+    width: 95%;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+}
+
+h1 {
+    text-align: center;
+    color: var(--text-color);
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+/* Inputs e Textareas */
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--label-color);
+}
+
+input[type="text"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--input-bg-color);
+    color: var(--text-color);
+    font-size: 1rem;
+    box-sizing: border-box;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+input[type="text"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--input-border-focus);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Botões */
+.btn-primary, .btn-secondary, .btn-toggle {
+    display: block;
+    width: 100%;
+    padding: 0.9rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    margin-top: 1.5rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-btn-bg);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-btn-hover);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-btn-bg);
+    color: white;
+    width: auto; /* Para o botão Copiar */
+    align-self: flex-end; /* Para alinhar à direita no output */
+    margin-top: 1rem;
+}
+
+.btn-secondary:hover {
+    background-color: var(--secondary-btn-hover);
+}
+
+.btn-toggle {
+    background-color: var(--toggle-btn-bg);
+    color: var(--text-color);
+    font-weight: 600;
+    border: 1px solid var(--border-color);
+}
+
+.btn-toggle:hover {
+    background-color: var(--toggle-btn-hover);
+}
+
+/* Seções */
+.input-section, .template-section, .advanced-options, .output-section {
+    margin-bottom: 2rem;
+}
+
+.dynamic-inputs {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: var(--bg-color);
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
+.dynamic-inputs label {
+    font-size: 0.95rem;
+    margin-top: 1rem;
+}
+
+.dynamic-inputs input,
+.dynamic-inputs textarea {
+    margin-bottom: 0.8rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.output-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.feedback-message {
+    margin-top: 1.5rem;
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    text-align: center;
+    display: none; /* Escondido por padrão */
+}
+
+.feedback-message.success {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: var(--feedback-success);
+    border: 1px solid var(--feedback-success);
+}
+
+.feedback-message.error {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: var(--feedback-error);
+    border: 1px solid var(--feedback-error);
+}
+
+/* Media Queries para Responsividade */
+@media (max-width: 768px) {
+    .app-header {
+        padding: 0.8rem 1rem;
+    }
+    .logo {
+        font-size: 1.2rem;
+    }
+    .container {
+        padding: 1.5rem;
+        margin: 1rem auto;
+    }
+    h1 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .btn-primary, .btn-secondary, .btn-toggle {
+        font-size: 1rem;
+        padding: 0.8rem 1rem;
+    }
+}
