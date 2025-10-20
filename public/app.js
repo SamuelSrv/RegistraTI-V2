@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const copyBtn = document.getElementById('copyBtn');
     const feedbackMessage = document.getElementById('feedbackMessage');
 
-    let templates = {}; 
+    let templates = {};
     const STORAGE_KEY = 'aiScriptTemplates'; // Chave unificada
 
     // --- Funções de Utilitário ---
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Popula o dropdown de seleção de templates
     function populateTemplateSelector() {
-        templateSelector.innerHTML = '<option value="">Nenhum (usar apenas descrição)</option>'; // Texto alterado
+        templateSelector.innerHTML = '<option value="">Nenhum (usar apenas descrição)</option>';
         for (const key in templates) {
             const option = document.createElement('option');
             option.value = key;
@@ -57,21 +57,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Renderiza inputs dinâmicos com base no template selecionado
     function renderDynamicInputs(templateKey) {
-        dynamicInputsContainer.innerHTML = ''; // Limpa inputs anteriores
+        dynamicInputsContainer.innerHTML = '';
         if (!templateKey || !templates[templateKey]) {
-            dynamicInputsContainer.style.display = 'none'; // Esconde se nenhum template
+            dynamicInputsContainer.style.display = 'none';
             return;
         }
-        dynamicInputsContainer.style.display = 'block'; // Mostra se houver template
+        dynamicInputsContainer.style.display = 'block';
 
         const templateText = templates[templateKey];
         const variables = findTemplateVariables(templateText);
 
         variables.forEach(variable => {
-            // Ignorar variáveis que já são preenchidas pelos campos fixos
             const upperVar = variable.toUpperCase();
             if (['NUMERO_CHAMADO', 'NOME_SOLICITANTE', 'DEPARTAMENTO', 'ACAO_PRINCIPAL'].includes(upperVar)) {
-                return; 
+                return;
             }
 
             const label = document.createElement('label');
@@ -79,19 +78,18 @@ document.addEventListener('DOMContentLoaded', function () {
             label.textContent = friendlyName + ':';
             label.htmlFor = `dynamic-input-${variable}`;
 
-            // Cria textarea se o nome contiver 'acao' ou 'descricao', senão input
             const isLargeInput = variable.toLowerCase().includes('acao') || variable.toLowerCase().includes('descricao');
             const input = document.createElement(isLargeInput ? 'textarea' : 'input');
             
             if (!isLargeInput) {
                 input.type = 'text';
             } else {
-                input.rows = 3; // Menor que o principal
+                input.rows = 3;
             }
 
             input.id = `dynamic-input-${variable}`;
             input.placeholder = `Preencha ${friendlyName}...`;
-            input.classList.add('dynamic-field'); // Classe para estilização opcional
+            input.classList.add('dynamic-field');
 
             dynamicInputsContainer.appendChild(label);
             dynamicInputsContainer.appendChild(input);
@@ -105,12 +103,12 @@ document.addEventListener('DOMContentLoaded', function () {
         feedbackMessage.style.display = 'block';
         setTimeout(() => {
             feedbackMessage.style.display = 'none';
-        }, 5000); // Esconde após 5 segundos
+        }, 5000);
     }
 
     // --- Lógica Principal de Geração de Script ---
 
-    async function generateScript() {
+    async function handleGerarScript() {
         const mainAction = mainActionInput.value.trim();
         if (!mainAction) {
             showFeedback('Por favor, descreva a ação principal realizada.', 'error');
@@ -121,32 +119,33 @@ document.addEventListener('DOMContentLoaded', function () {
         generateBtn.disabled = true;
         generateBtn.textContent = 'Gerando...';
         outputScript.value = 'Processando com IA...';
+        outputScript.readOnly = true; // Impede edição durante a geração
         outputScript.classList.remove('error-output');
         showFeedback('A Inteligência Artificial está trabalhando nisso...', 'success');
 
         const templateKey = templateSelector.value;
         let filledTemplateContent = "";
-        let baseTemplateText = ""; // Guarda o texto original do template
+        let baseTemplateText = "";
 
-        // Preenche o template selecionado com os valores dos campos dinâmicos
         if (templateKey && templates[templateKey]) {
-            baseTemplateText = templates[templateKey]; // Guarda o original
+            baseTemplateText = templates[templateKey];
             filledTemplateContent = baseTemplateText;
             const variables = findTemplateVariables(filledTemplateContent);
             variables.forEach(variable => {
                 const inputElement = document.getElementById(`dynamic-input-${variable}`);
+                // Usa placeholder em negrito se campo dinâmico estiver vazio
                 const value = inputElement ? inputElement.value.trim() : '';
+                const placeholder = `**[${variable.replace(/_/g,' ').toUpperCase()}]**`;
                 const regex = new RegExp(`_START_${variable}_`, 'g');
-                // Preenche a cópia, não o original
-                filledTemplateContent = filledTemplateContent.replace(regex, value || `**[${variable.replace(/_/g,' ')}]**`); // Adiciona marcador se vazio
+                filledTemplateContent = filledTemplateContent.replace(regex, value || placeholder);
             });
         }
 
-        // Dados adicionais (opções avançadas)
+        // Usa placeholder em negrito se campos avançados estiverem vazios
         const advancedDetails = {
-            ticketNumber: ticketNumberInput.value.trim() || '**[Número Chamado]**', // Adiciona marcador se vazio
-            requester: requesterInput.value.trim() || '**[Nome Solicitante]**', // Adiciona marcador se vazio
-            department: departmentInput.value.trim() || '**[Departamento]**' // Adiciona marcador se vazio
+            ticketNumber: ticketNumberInput.value.trim() || '**[Número Chamado]**',
+            requester: requesterInput.value.trim() || '**[Nome Solicitante]**',
+            department: departmentInput.value.trim() || '**[Departamento]**'
         };
 
         // Substitui variáveis fixas no template preenchido
@@ -155,36 +154,35 @@ document.addEventListener('DOMContentLoaded', function () {
         filledTemplateContent = filledTemplateContent.replace(/_START_DEPARTAMENTO_/g, advancedDetails.department);
         filledTemplateContent = filledTemplateContent.replace(/_START_ACAO_PRINCIPAL_/g, mainAction); // Substitui a ação principal
 
-        // --- PROMPT DA IA MODIFICADO ---
+        // --- INÍCIO DO PROMPT PARA A IA ---
+        // ESTE É O TEXTO EXATO QUE VOCÊ COLOCOU NA SUA MENSAGEM
         const prompt = `
-            Você é um assistente de Suporte Técnico (TI) redigindo um registro de encerramento de chamado claro e profissional.
+            Você é um especialista em Suporte Técnico (TI) sênior, redigindo o registro de um chamado para um sistema de tickets.
+            Sua tarefa é criar um registro profissional e completo usando as seguintes informações:
 
-            **Tarefa Principal:** Aprimorar a descrição da ação realizada pelo técnico, mantendo a clareza e adicionando um toque profissional, sem ser excessivamente técnico. Use a estrutura do template (se fornecido) como guia, mas foque em melhorar a descrição principal. Coloque em negrito (usando **texto**) as partes que o técnico talvez precise revisar ou completar (como nomes específicos, senhas temporárias, ou detalhes omitidos).
+            **INFORMAÇÕES DO CHAMADO (se fornecidas):**
+            - Número do Chamado: ${advancedDetails.ticketNumber}
+            - Solicitante: ${advancedDetails.requester}
+            - Departamento: ${advancedDetails.department}
 
-            **INFORMAÇÕES FORNECIDAS:**
+            **DESCRIÇÃO PRINCIPAL DA AÇÃO REALIZADA (informação mais importante):**
+            ---
+            ${mainAction}
+            ---
 
-            1.  **DESCRIÇÃO PRINCIPAL DO TÉCNICO (Mais importante):**
-                ---
-                ${mainAction}
-                ---
+            **ESTRUTURA E CONTEXTO DO TEMPLATE (se um padrão foi usado):**
+            ---
+            ${filledTemplateContent || 'Nenhum padrão utilizado'}
+            ---
 
-            2.  **DETALHES DO CHAMADO:**
-                - Número: ${advancedDetails.ticketNumber}
-                - Solicitante: ${advancedDetails.requester}
-                - Departamento: ${advancedDetails.department}
-
-            3.  **TEXTO PRÉ-PREENCHIDO DO MODELO (Use como base para estrutura e placeholders em negrito):**
-                ---
-                ${filledTemplateContent || 'Nenhum modelo selecionado.'}
-                ---
-            
-            **INSTRUÇÕES DETALHADAS:**
-            - **Foco:** Melhore a "DESCRIÇÃO PRINCIPAL DO TÉCNICO". Torne-a mais completa e profissional, mas evite jargões muito complexos.
-            - **Estrutura:** Siga a estrutura geral do "TEXTO PRÉ-PREENCHIDO DO MODELO", se houver. Comece com uma saudação, descreva a ação (baseada na DESCRIÇÃO PRINCIPAL), e finalize.
-            - **Negrito:** Mantenha ou adicione **negrito** (Markdown: **texto**) em locais onde o técnico precise confirmar ou preencher informações (ex: **[Nome do Software]**, **[Senha Temporária]**, **[Detalhe Específico]**). Use os placeholders em negrito que já estão no texto pré-preenchido como guia.
-            - **Tom:** Objetivo, claro e prestativo.
-            - **Saída:** Gere APENAS o texto final do registro. Não inclua títulos ou frases como "Aqui está o script:".
+            **SUAS INSTRUÇÕES:**
+            1.  Baseie o corpo principal do seu texto na "DESCRIÇÃO PRINCIPAL DA AÇÃO REALIZADA". Esta é a fonte da verdade sobre o que foi feito.
+            2.  Incorpore as "INFORMAÇÕES DO CHAMADO" de forma natural no registro. Por exemplo, comece com uma saudação ao solicitante.
+            3.  Use a "ESTRUTURA E CONTEXTO DO TEMPLATE" principalmente para guiar a saudação inicial e a frase de encerramento, mas a descrição do serviço deve vir da "DESCRIÇÃO PRINCIPAL".
+            4.  Enriqueça o texto com detalhes técnicos plausíveis que um analista de TI teria executado.
+            5.  O resultado final deve ser apenas o texto do registro, claro, profissional e conclusivo.
         `;
+        // --- FIM DO PROMPT PARA A IA ---
 
         try {
             const response = await fetch('/api/generate', {
@@ -195,16 +193,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (!response.ok) {
                 const errorData = await response.json();
+                // Usa a mensagem de erro vinda do backend (netlify function) se disponível
                 throw new Error(errorData.error || `Erro de rede: ${response.statusText} (${response.status})`);
             }
 
             const data = await response.json();
             outputScript.value = data.text;
-            outputScript.readOnly = false; // Permite edição
+            outputScript.readOnly = false; // Permite edição após sucesso
             showFeedback('Script gerado com sucesso! Você pode editá-lo abaixo.', 'success');
 
         } catch (error) {
             console.error('Erro ao chamar a API:', error);
+            // Mostra a mensagem de erro detalhada vinda do catch ou do backend
             outputScript.value = `Erro ao gerar script: ${error.message}`;
             outputScript.classList.add('error-output');
             outputScript.readOnly = true; // Impede edição no erro
@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function () {
     generateBtn.addEventListener('click', generateScript);
 
     copyBtn.addEventListener('click', () => {
-        if (outputScript.value && !outputScript.readOnly) { // Só copia se não houver erro
+        if (outputScript.value && !outputScript.readOnly) {
             navigator.clipboard.writeText(outputScript.value).then(() => {
                 showFeedback('Script copiado para a área de transferência!', 'success');
             }).catch(err => {
@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function init() {
         loadTemplates();
         populateTemplateSelector();
-        renderDynamicInputs(templateSelector.value); // Renderiza inputs iniciais se houver valor salvo
+        renderDynamicInputs(templateSelector.value); // Renderiza inputs se um template já estiver selecionado
     }
 
     init();
