@@ -2,8 +2,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- Referências de Elementos ---
     const mainActionInput = document.getElementById('mainActionInput');
     const templateSelector = document.getElementById('templateSelector'); // Mantido para contexto opcional
-    //const dynamicInputsContainer = document.getElementById('dynamic-inputs-container'); // Removido do uso principal
-    //const toggleAdvancedBtn = document.getElementById('toggleAdvancedBtn'); // Removido
     const advancedOptionsContainer = document.getElementById('advanced-options-container'); // Mantido
     const ticketNumberInput = document.getElementById('ticketNumberInput');
     const requesterInput = document.getElementById('requesterInput');
@@ -13,63 +11,60 @@ document.addEventListener('DOMContentLoaded', function () {
     const copyBtn = document.getElementById('copyBtn');
     const feedbackMessage = document.getElementById('feedbackMessage');
 
-    let templates = {}; 
+    let templates = {};
     const STORAGE_KEY = 'aiScriptTemplates';
 
     // --- Funções de Utilitário ---
 
     function loadTemplates() {
         const savedTemplates = localStorage.getItem(STORAGE_KEY);
-        // Carrega salvos ou define os novos padrões
-        if (savedTemplates && Object.keys(JSON.parse(savedTemplates)).length > 0) {
-            // Se o usuário já tinha templates customizados, mantém eles
+        if (!savedTemplates || Object.keys(JSON.parse(savedTemplates)).length === 0) {
+            setDefaultTemplates(); // Chama a função para definir os padrões
+        } else {
              try {
                 templates = JSON.parse(savedTemplates);
+                // Verifica se os templates carregados são os novos (com 'Contexto:')
+                // Se não forem, reseta para os padrões. Isso ajuda na transição.
+                const firstKey = Object.keys(templates)[0];
+                if (firstKey && !templates[firstKey].startsWith("Contexto:")) {
+                    console.log("Detectados templates antigos, redefinindo para os padrões.");
+                    setDefaultTemplates();
+                }
              } catch (e) {
                  console.error("Erro ao carregar templates salvos:", e);
-                 // Se der erro ao carregar, usa os padrões
-                 setDefaultTemplates();
+                 setDefaultTemplates(); // Usa padrões em caso de erro
              }
-        } else {
-             setDefaultTemplates();
         }
-        populateTemplateSelector(); 
+        populateTemplateSelector();
     }
 
-    // Define os templates padrão
+    // Define os templates padrão ATUALIZADOS
     function setDefaultTemplates() {
          templates = {
             instalacaoSoftware: "Contexto: Instalação de Software",
-            configImpressora: "Contexto: Configuração De impressora",
+            configImpressora: "Contexto: Configuração de Impressora",
             instalacaoEstacao: "Contexto: Instalação/Configuração de Estação (Física)",
-            configRamal: "Contexto: Configuração Ramal",
-            solicitacaoEquipamento: "Contexto: Solicitação de equipamento",
-            atendimentoGenerico: "Contexto: Atendimento Geral" // Renomeado para clareza
+            configRamal: "Contexto: Configuração de Ramal",
+            solicitacaoEquipamento: "Contexto: Solicitação de Equipamento",
+            atendimentoGenerico: "Contexto: Atendimento Geral" // Nome mais claro
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(templates));
     }
 
-
     function populateTemplateSelector() {
-        templateSelector.innerHTML = '<option value="">Nenhum Contexto Específico</option>'; // Opção padrão
+        templateSelector.innerHTML = '<option value="">Nenhum Contexto Específico</option>';
         if (!templates || Object.keys(templates).length === 0) {
-             console.warn("Nenhum template/contexto encontrado.");
-             return; 
+             return;
         }
-        
+
         for (const key in templates) {
             const option = document.createElement('option');
-            option.value = key; // A chave ainda pode ser útil
-             // Usa o valor do template (o texto "Contexto: ...") como label
-            const labelText = templates[key].startsWith("Contexto: ") ? templates[key].substring(10) : key; 
-            option.textContent = labelText;
+            option.value = key;
+            const labelText = templates[key].startsWith("Contexto: ") ? templates[key].substring(10) : key;
+            option.textContent = labelText; // Exibe o nome amigável
             templateSelector.appendChild(option);
         }
     }
-
-    // Função não mais necessária no fluxo principal, mas pode ser útil para custom templates no futuro
-    // function findTemplateVariables(text) { ... } 
-    // function renderDynamicInputs(templateKey) { ... }
 
     function showFeedback(message, type) {
         feedbackMessage.textContent = message;
@@ -77,12 +72,12 @@ document.addEventListener('DOMContentLoaded', function () {
         feedbackMessage.style.display = 'block';
         setTimeout(() => {
             feedbackMessage.style.display = 'none';
-        }, 4000); // Feedback um pouco mais curto
+        }, 4000);
     }
 
     // --- Lógica Principal de Geração de Script ---
 
-    async function handleGerarScript() { 
+    async function handleGerarScript() {
         const mainAction = mainActionInput.value.trim();
         if (!mainAction) {
             showFeedback('Por favor, descreva a ação realizada.', 'error');
@@ -93,13 +88,12 @@ document.addEventListener('DOMContentLoaded', function () {
         generateBtn.disabled = true;
         generateBtn.textContent = 'Gerando...';
         outputScript.value = 'Processando com IA...';
-        outputScript.readOnly = true; 
+        outputScript.readOnly = true;
         outputScript.classList.remove('error-output');
-        showFeedback('A Inteligência Artificial está trabalhando...', 'success'); // Mensagem mais curta
+        showFeedback('A Inteligência Artificial está trabalhando...', 'success');
 
-        // Coleta apenas os dados essenciais
         const contextKey = templateSelector.value;
-        const contextText = contextKey ? templates[contextKey] : "Nenhum contexto específico selecionado"; // Pega o texto do contexto
+        const contextText = contextKey ? templates[contextKey] : "Nenhum contexto específico selecionado";
 
         const details = {
             ticketNumber: ticketNumberInput.value.trim(),
@@ -107,16 +101,19 @@ document.addEventListener('DOMContentLoaded', function () {
             department: departmentInput.value.trim()
         };
 
-        // Chama a função que envia para a API
-        gerarRegistroTecnico(mainAction, details, contextText); 
+        gerarRegistroTecnico(mainAction, details, contextText);
     }
 
     async function gerarRegistroTecnico(mainAction, details, contextText) {
-        // --- NOVO PROMPT PARA IA ---
+        // --- PROMPT DA IA ATUALIZADO COM ASSINATURA ---
         const prompt = `
             Você é um assistente de IA para Suporte Técnico (TI), especializado em criar registros concisos e técnicos para sistemas de chamados.
 
-            **Tarefa:** Gerar um registro técnico baseado na descrição fornecida pelo analista. O registro deve ser claro, objetivo e focado nos fatos técnicos relevantes.
+            **Tarefa:** Gerar um registro técnico baseado na descrição fornecida pelo analista. O registro deve ser claro, objetivo e focado nos fatos técnicos relevantes. **Ao final do registro, SEMPRE adicione a seguinte despedida e assinatura:**
+            Qualquer Duvida Ficamos a disposição, o chamado esta sendo encerrado
+
+            Atenciosamente,
+            Ibrowse / NTI-RS
 
             **INFORMAÇÕES FORNECIDAS:**
 
@@ -126,20 +123,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 ---
 
             2.  **DETALHES ADICIONAIS (Opcionais):**
-                - Nº Chamado: ${details.ticketNumber || ''} 
+                - Nº Chamado: ${details.ticketNumber || ''}
                 - Solicitante: ${details.requester || ''}
                 - Departamento: ${details.department || ''}
-            
+
             3.  **CONTEXTO/ASSUNTO GERAL (Opcional):** ${contextText}
 
             **INSTRUÇÕES PARA O REGISTRO:**
 
-            * **Foco:** Baseie-se **principalmente** na "DESCRIÇÃO DO ANALISTA". Reformule-a de forma técnica e concisa, se necessário, mas mantenha a essência do que foi feito.
-            * **Inclusão de Detalhes:** **SOMENTE** inclua o Nº Chamado, Solicitante ou Departamento no registro se eles foram **fornecidos** (não estão vazios). Não use placeholders como "[Não informado]". Se fornecidos, integre-os de forma natural (ex: "Atendimento ao solicitante [Nome] do depto [Depto] referente ao ticket [Numero]").
-            * **Tom Técnico:** Use linguagem técnica apropriada, mas evite jargões excessivos. Seja direto e objetivo. Não adicione saudações ou despedidas (ex: "Prezado", "Atenciosamente").
-            * **Conciso:** Evite informações redundantes ou floreios. O registro deve ser um resumo factual do atendimento.
-            * **Contexto:** Use o "CONTEXTO/ASSUNTO GERAL" apenas como uma leve indicação do tipo de atendimento, se ajudar a refinar a linguagem técnica.
-            * **Saída:** Gere APENAS o texto do registro técnico. Sem títulos, introduções ou metatexto.
+            * **Foco:** Baseie-se **principalmente** na "DESCRIÇÃO DO ANALISTA". Reformule-a de forma técnica e concisa, se necessário, mas mantenha a essência do que foi feito. Exemplo: Se a descrição for "instalação java", o registro pode ser "Realizada instalação do Java Runtime Environment (JRE) versão X na estação de trabalho. Testes de execução de aplicação Java realizados com sucesso."
+            * **Inclusão de Detalhes:** **SOMENTE** inclua o Nº Chamado, Solicitante ou Departamento no registro se eles foram **fornecidos** (não estão vazios). Não use placeholders como "[Não informado]". Se fornecidos, integre-os no início (ex: "Referente ao chamado [Numero], solicitado por [Nome] ([Depto]): ...").
+            * **Tom Técnico:** Use linguagem técnica apropriada, mas clara. Seja direto. Não adicione saudações como "Olá" ou "Prezado".
+            * **Conciso:** Evite informações redundantes. O registro é um resumo factual.
+            * **Assinatura:** **Obrigatório** incluir a assinatura completa no final, exatamente como especificado acima.
+            * **Saída:** Gere APENAS o texto do registro técnico + assinatura. Sem títulos ou metatexto.
         `;
         // --- FIM DO NOVO PROMPT ---
 
@@ -164,28 +161,22 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Erro ao chamar a API:', error);
             outputScript.value = `Erro ao gerar registro: ${error.message}`;
             outputScript.classList.add('error-output');
-            outputScript.readOnly = true; 
+            outputScript.readOnly = true;
             showFeedback(`Erro: ${error.message}`, 'error');
 
         } finally {
             generateBtn.disabled = false;
-            generateBtn.textContent = 'Gerar Registro'; // Nome do botão ajustado
+            generateBtn.textContent = 'Gerar Registro';
         }
     }
 
     // --- Event Listeners e Inicialização ---
-    // Removido o listener para renderizar inputs dinâmicos, pois não são mais o foco
-    // templateSelector.addEventListener('change', ...); 
-
-    // Removido o listener do botão toggleAdvancedBtn
-    // toggleAdvancedBtn.addEventListener('click', ...);
-
-    generateBtn.addEventListener('click', handleGerarScript); // Chama a função correta
+    generateBtn.addEventListener('click', handleGerarScript);
 
     copyBtn.addEventListener('click', () => {
         if (outputScript.value && !outputScript.readOnly) {
             navigator.clipboard.writeText(outputScript.value).then(() => {
-                showFeedback('Registro copiado!', 'success'); // Mensagem mais curta
+                showFeedback('Registro copiado!', 'success');
             }).catch(err => {
                 console.error('Falha ao copiar: ', err);
                 showFeedback('Falha ao copiar. Tente manualmente.', 'error');
@@ -201,5 +192,5 @@ document.addEventListener('DOMContentLoaded', function () {
         loadTemplates(); // Carrega e popula templates/contextos
     }
 
-    init(); 
+    init();
 });
