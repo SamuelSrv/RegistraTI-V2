@@ -196,7 +196,7 @@ textarea {
 #mainActionInput {
     min-height: 120px; /* Campo principal maior */
     max-height: 300px;
-    margin-bottom: 2rem; /* Mais espaço após a ação principal */
+   
 }
 
 #outputScript {
@@ -463,4 +463,56 @@ textarea {
          width: auto;
          padding: 0.4rem 0.8rem;
      }
+}
+#logo-inicio {
+    display: block;
+    width: 300px;
+    height: auto;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+   
+}
+
+/* --- Estilos do Footer --- */
+footer {
+  width: 100%; /* Ocupa toda a largura */
+  background-color: var(--container-bg-color); /* Usa a cor de fundo do container ou do header */
+  color: var(--label-color); /* Cor de texto mais suave */
+  text-align: center;
+  padding: 1.5rem 1rem; /* Espaçamento interno (vertical, horizontal) */
+  margin-top: 3rem; /* Espaço acima do footer, separando do conteúdo principal */
+  border-top: 1px solid var(--border-color); /* Linha sutil no topo */
+  font-size: 0.9rem; /* Tamanho da fonte ligeiramente menor */
+  box-sizing: border-box; /* Garante que o padding não aumente a largura total */
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Transição suave para tema */
+}
+
+footer p {
+  margin: 0; /* Remove margens padrão do parágrafo */
+  line-height: 1.5; /* Melhora a legibilidade */
+}
+
+footer a {
+  color: var(--link-color); /* Usa a cor de link do tema */
+  text-decoration: none; /* Remove sublinhado padrão */
+  font-weight: 500; /* Levemente mais forte que o texto normal */
+  margin: 0 0.5rem; /* Espaçamento horizontal entre os links e o texto */
+  transition: color 0.2s ease;
+}
+
+footer a:hover {
+  text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
+  color: var(--primary-btn-hover); /* Pode usar a cor de hover do botão para destaque */
+}
+
+/* Ajuste para telas pequenas */
+@media (max-width: 768px) {
+    footer {
+        padding: 1rem;
+        font-size: 0.85rem;
+    }
+    footer p {
+        /* Permite quebra de linha se necessário */
+    }
 }

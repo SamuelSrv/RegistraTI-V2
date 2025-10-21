@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-BR" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Padroniza TI - Gerar Registro</title> <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" type="image/x-icon" href="img/icon.ico"> 
+    <title>Padroniza TI - Gerar Registro</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="img/icon.ico">
 </head>
+
 <body>
     <header class="app-header">
-        <a href="index.html" class="logo">Padroniza TI</a> 
+        <a href="index.html" class="logo">Padroniza TI</a>
         <nav class="main-nav">
             <a href="index.html">Gerar Registro</a> <a href="editar.html">Gerenciar Modelos</a>
         </nav>
@@ -19,37 +22,40 @@
     </header>
 
     <main class="container">
-        <h1>Gerador de Registro Técnico</h1> <section class="input-section">
-            <label for="mainActionInput">Descreva a Ação Realizada:</label>
-            <textarea id="mainActionInput" rows="6" placeholder="Detalhe aqui o serviço executado. Ex: Instalação do Office 365 na estação de trabalho do usuário Carlos (Financeiro), conforme ticket 123456. Software ativado e Outlook configurado."></textarea>
+        <img id="logo-inicio" src="img/logo-inicio.png" alt="logo-home">
+        <section class="input-section"> <label for="mainActionInput">Descreva a Ação Realizada:</label>
+            <textarea id="mainActionInput" rows="6"
+                placeholder="Detalhe aqui o serviço executado. Ex: Instalação do Office 365 na estação de trabalho do usuário."></textarea>
         </section>
 
         <section class="advanced-options">
-             <div id="advanced-options-container"> 
-                <div class="form-row"> <div class="form-group">
+            <div id="advanced-options-container">
+                <div class="form-row">
+                    <div class="form-group">
                         <label for="ticketNumberInput">Nº Chamado (Opcional):</label>
                         <input type="text" id="ticketNumberInput" placeholder="Ex: 123456">
                     </div>
                     <div class="form-group">
                         <label for="requesterInput">Solicitante (Opcional):</label>
-                        <input type="text" id="requesterInput" placeholder="Ex: Carlos Andrade">
+                        <input type="text" id="requesterInput" placeholder="Ex: Samuel Silva">
                     </div>
                     <div class="form-group">
-                         <label for="departmentInput">Departamento (Opcional):</label>
-                         <input type="text" id="departmentInput" placeholder="Ex: Financeiro">
+                        <label for="departmentInput">Departamento (Opcional):</label>
+                        <input type="text" id="departmentInput" placeholder="Ex: NTI">
                     </div>
                 </div>
-                 <label for="templateSelector" style="margin-top: 1rem;">Contexto/Assunto (Opcional):</label>
-                 <select id="templateSelector">
-                     </select>
+                <label for="templateSelector" style="margin-top: 1rem;">Contexto/Assunto (Opcional):</label>
+                <select id="templateSelector">
+                </select>
             </div>
         </section>
-        
+
         <button id="generateBtn" class="btn-primary">Gerar Registro</button>
 
         <section class="output-section">
             <label for="outputScript">Registro Gerado (Editável):</label>
-            <textarea id="outputScript" rows="12" placeholder="Seu registro técnico gerado pela IA aparecerá aqui..." readonly></textarea>
+            <textarea id="outputScript" rows="12" placeholder="Seu registro técnico gerado pela IA aparecerá aqui..."
+                readonly></textarea>
             <button id="copyBtn" class="btn-secondary">Copiar Registro</button>
         </section>
 
@@ -58,5 +64,21 @@
 
     <script src="app.js"></script>
     <script src="theme.js"></script>
+
+    <script src="app.js"></script>
+    <script src="theme.js"></script>
+
+    <footer>
+        <p>
+            &copy; 2025 SamuelSrv. Todos os direitos reservados. |
+            <a href="https://github.com/SamuelSrv" target="_blank" rel="noopener noreferrer">GitHub</a> |
+            <a href="https://www.linkedin.com/in/samuelsrv/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </p>
+    </footer>
+
 </body>
+
+</html>
+</body>
+
 </html>
