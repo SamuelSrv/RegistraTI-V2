@@ -11,8 +11,10 @@
     --primary-btn-hover: #0056b3;
     --secondary-btn-bg: #6c757d;
     --secondary-btn-hover: #5a6268;
-    --toggle-btn-bg: #f0f0f0; /* Não mais usado */
-    --toggle-btn-hover: #e0e0e0; /* Não mais usado */
+    --toggle-btn-bg: #f0f0f0;
+    /* Não mais usado */
+    --toggle-btn-hover: #e0e0e0;
+    /* Não mais usado */
     --header-bg: #ffffff;
     --header-text: #333333;
     --feedback-success: #28a745;
@@ -35,8 +37,10 @@
     --primary-btn-hover: #3182ce;
     --secondary-btn-bg: #718096;
     --secondary-btn-hover: #5a6268;
-    --toggle-btn-bg: #4a5568; /* Não mais usado */
-    --toggle-btn-hover: #3c4556; /* Não mais usado */
+    --toggle-btn-bg: #4a5568;
+    /* Não mais usado */
+    --toggle-btn-hover: #3c4556;
+    /* Não mais usado */
     --header-bg: #2d3748;
     --header-text: #e2e8f0;
     --feedback-success: #68d391;
@@ -89,7 +93,8 @@ body {
     gap: 15px;
     flex-grow: 1;
     justify-content: center;
-    margin-left: -80px; /* Ajuste fino */
+    margin-left: -80px;
+    /* Ajuste fino */
 }
 
 .main-nav a {
@@ -125,6 +130,7 @@ body {
 .theme-toggle-btn:hover {
     background-color: rgba(0, 0, 0, 0.05);
 }
+
 [data-theme="dark"] .theme-toggle-btn:hover {
     background-color: rgba(255, 255, 255, 0.05);
 }
@@ -176,7 +182,8 @@ textarea {
     color: var(--text-color);
     font-size: 1rem;
     box-sizing: border-box;
-    margin-bottom: 1.5rem; /* Espaço padrão abaixo dos campos */
+    margin-bottom: 1.5rem;
+    /* Espaço padrão abaixo dos campos */
     transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -194,9 +201,10 @@ textarea {
 }
 
 #mainActionInput {
-    min-height: 120px; /* Campo principal maior */
+    min-height: 120px;
+    /* Campo principal maior */
     max-height: 300px;
-   
+
 }
 
 #outputScript {
@@ -212,7 +220,10 @@ textarea {
 }
 
 /* Botões */
-.btn-primary, .btn-secondary, .btn-toggle, .btn-delete {
+.btn-primary,
+.btn-secondary,
+.btn-toggle,
+.btn-delete {
     display: block;
     width: 100%;
     padding: 0.8rem 1.2rem;
@@ -230,7 +241,8 @@ textarea {
 .btn-primary {
     background-color: var(--primary-btn-bg);
     color: white;
-    margin-top: 2rem; /* Botão principal com mais espaço acima */
+    margin-top: 2rem;
+    /* Botão principal com mais espaço acima */
 }
 
 .btn-primary:hover {
@@ -253,42 +265,56 @@ textarea {
 }
 
 /* Seções */
-.input-section, .template-section, .advanced-options, .output-section {
+.input-section,
+.template-section,
+.advanced-options,
+.output-section {
     margin-bottom: 1.5rem;
 }
 
 .template-section select {
-     margin-bottom: 0; /* Remove espaço extra abaixo do select de contexto */
+    margin-bottom: 0;
+    /* Remove espaço extra abaixo do select de contexto */
 }
 
 /* --- ESTILOS PARA OPÇÕES AVANÇADAS (sem botão toggle) --- */
 #advanced-options-container {
-     padding: 1.5rem 0 0 0; /* Apenas padding no topo */
-     margin-top: 1rem;
-     /* background-color: var(--bg-color); */ /* Fundo removido para integrar melhor */
-     border-radius: 5px;
-     /* border: 1px solid var(--border-color); */ /* Borda removida */
+    padding: 1.5rem 0 0 0;
+    /* Apenas padding no topo */
+    margin-top: 1rem;
+    /* background-color: var(--bg-color); */
+    /* Fundo removido para integrar melhor */
+    border-radius: 5px;
+    /* border: 1px solid var(--border-color); */
+    /* Borda removida */
 }
 
 /* Layout em linha para campos avançados */
 .form-row {
     display: flex;
-    flex-wrap: wrap; /* Permite quebra em telas menores */
-    gap: 1rem; /* Espaço entre os grupos */
-    margin-bottom: 1rem; /* Espaço abaixo da linha */
+    flex-wrap: wrap;
+    /* Permite quebra em telas menores */
+    gap: 1rem;
+    /* Espaço entre os grupos */
+    margin-bottom: 1rem;
+    /* Espaço abaixo da linha */
 }
 
 .form-group {
-    flex: 1; /* Faz os grupos ocuparem espaço igual */
-    min-width: 150px; /* Largura mínima antes de quebrar */
+    flex: 1;
+    /* Faz os grupos ocuparem espaço igual */
+    min-width: 150px;
+    /* Largura mínima antes de quebrar */
 }
 
 .form-group label {
-    margin-bottom: 0.3rem; /* Menos espaço abaixo da label */
+    margin-bottom: 0.3rem;
+    /* Menos espaço abaixo da label */
 }
 
 .form-group input {
-    margin-bottom: 0; /* Remove espaço abaixo do input no grupo */
+    margin-bottom: 0;
+    /* Remove espaço abaixo do input no grupo */
 }
 
 
@@ -301,10 +327,13 @@ textarea {
     flex-direction: column;
     margin-top: 2rem;
 }
+
 .output-section label {
     margin-bottom: 0.5rem;
 }
-.output-section .btn-secondary { /* Botão Copiar */
+
+.output-section .btn-secondary {
+    /* Botão Copiar */
     align-self: flex-end;
     margin-top: 0.8rem;
 }
@@ -398,9 +427,15 @@ textarea {
 
 /* Animação de giro para o ícone de tema */
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
+
 .spin-animation {
     animation: spin 0.5s ease-out forwards;
 }
@@ -409,61 +444,92 @@ textarea {
 @media (max-width: 768px) {
     .app-header {
         padding: 0.8rem 1rem;
-        flex-direction: column; /* Logo e menu ficam um sobre o outro */
-        align-items: center; /* Centraliza tudo */
-        position: static; /* Header não fica fixo no mobile */
+        flex-direction: column;
+        /* Logo e menu ficam um sobre o outro */
+        align-items: center;
+        /* Centraliza tudo */
+        position: static;
+        /* Header não fica fixo no mobile */
     }
+
     body {
-        padding-top: 0; /* Remove padding do body no mobile */
+        padding-top: 0;
+        /* Remove padding do body no mobile */
     }
+
     .logo {
         margin-bottom: 0.5rem;
         font-size: 1.3rem;
     }
-     .main-nav {
-         order: 2; /* Menu vem depois do logo */
-         margin-left: 0;
-         margin-top: 0.5rem;
-         margin-bottom: 0.5rem; /* Espaço abaixo do menu */
-         width: 100%; /* Ocupa largura */
-         justify-content: center; /* Centraliza links */
-     }
+
+    .main-nav {
+        order: 2;
+        /* Menu vem depois do logo */
+        margin-left: 0;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+        /* Espaço abaixo do menu */
+        width: 100%;
+        /* Ocupa largura */
+        justify-content: center;
+        /* Centraliza links */
+    }
+
     .header-actions {
-        order: 1; /* Botão de tema vem antes */
-        position: absolute; /* Posição absoluta para canto */
-        top: 0.8rem; 
-        right: 1rem; 
+        order: 1;
+        /* Botão de tema vem antes */
+        position: absolute;
+        /* Posição absoluta para canto */
+        top: 0.8rem;
+        right: 1rem;
     }
 
     .container {
-        padding: 1rem; /* Menor padding */
+        padding: 1rem;
+        /* Menor padding */
         margin: 1rem auto;
         width: 95%;
     }
+
     h1 {
-        font-size: 1.4rem; /* Título menor */
+        font-size: 1.4rem;
+        /* Título menor */
         margin-bottom: 1.5rem;
     }
-    .btn-primary, .btn-secondary, .btn-delete {
-        font-size: 0.95rem; /* Botões um pouco menores */
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-delete {
+        font-size: 0.95rem;
+        /* Botões um pouco menores */
         padding: 0.7rem 1rem;
     }
+
     .form-row {
-        flex-direction: column; /* Campos opcionais um abaixo do outro */
-        gap: 0; /* Remove gap da linha */
+        flex-direction: column;
+        /* Campos opcionais um abaixo do outro */
+        gap: 0;
+        /* Remove gap da linha */
     }
+
     .form-group {
-        margin-bottom: 1rem; /* Adiciona espaço entre os grupos */
+        margin-bottom: 1rem;
+        /* Adiciona espaço entre os grupos */
     }
-     .template-card div {
-         flex-direction: row; /* Mantém botões lado a lado */
-         justify-content: flex-end; /* Alinhados à direita */
-     }
-     .template-card button {
-         width: auto;
-         padding: 0.4rem 0.8rem;
-     }
+
+    .template-card div {
+        flex-direction: row;
+        /* Mantém botões lado a lado */
+        justify-content: flex-end;
+        /* Alinhados à direita */
+    }
+
+    .template-card button {
+        width: auto;
+        padding: 0.4rem 0.8rem;
+    }
 }
+
 #logo-inicio {
     display: block;
     width: 300px;
@@ -471,39 +537,56 @@ textarea {
     max-width: 100%;
     margin-left: auto;
     margin-right: auto;
-   
+
 }
 
 /* --- Estilos do Footer --- */
 footer {
-  width: 100%; /* Ocupa toda a largura */
-  background-color: var(--container-bg-color); /* Usa a cor de fundo do container ou do header */
-  color: var(--label-color); /* Cor de texto mais suave */
-  text-align: center;
-  padding: 1.5rem 1rem; /* Espaçamento interno (vertical, horizontal) */
-  margin-top: 3rem; /* Espaço acima do footer, separando do conteúdo principal */
-  border-top: 1px solid var(--border-color); /* Linha sutil no topo */
-  font-size: 0.9rem; /* Tamanho da fonte ligeiramente menor */
-  box-sizing: border-box; /* Garante que o padding não aumente a largura total */
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Transição suave para tema */
+    width: 100%;
+    /* Ocupa toda a largura */
+    background-color: var(--container-bg-color);
+    /* Usa a cor de fundo do container ou do header */
+    color: var(--label-color);
+    /* Cor de texto mais suave */
+    text-align: center;
+    padding: 1.5rem 1rem;
+    /* Espaçamento interno (vertical, horizontal) */
+    margin-top: 3rem;
+    /* Espaço acima do footer, separando do conteúdo principal */
+    border-top: 1px solid var(--border-color);
+    /* Linha sutil no topo */
+    font-size: 0.9rem;
+    /* Tamanho da fonte ligeiramente menor */
+    box-sizing: border-box;
+    /* Garante que o padding não aumente a largura total */
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    /* Transição suave para tema */
 }
 
 footer p {
-  margin: 0; /* Remove margens padrão do parágrafo */
-  line-height: 1.5; /* Melhora a legibilidade */
+    margin: 0;
+    /* Remove margens padrão do parágrafo */
+    line-height: 1.5;
+    /* Melhora a legibilidade */
 }
 
 footer a {
-  color: var(--link-color); /* Usa a cor de link do tema */
-  text-decoration: none; /* Remove sublinhado padrão */
-  font-weight: 500; /* Levemente mais forte que o texto normal */
-  margin: 0 0.5rem; /* Espaçamento horizontal entre os links e o texto */
-  transition: color 0.2s ease;
+    color: var(--link-color);
+    /* Usa a cor de link do tema */
+    text-decoration: none;
+    /* Remove sublinhado padrão */
+    font-weight: 500;
+    /* Levemente mais forte que o texto normal */
+    margin: 0 0.5rem;
+    /* Espaçamento horizontal entre os links e o texto */
+    transition: color 0.2s ease;
 }
 
 footer a:hover {
-  text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
-  color: var(--primary-btn-hover); /* Pode usar a cor de hover do botão para destaque */
+    text-decoration: underline;
+    /* Adiciona sublinhado ao passar o mouse */
+    color: var(--primary-btn-hover);
+    /* Pode usar a cor de hover do botão para destaque */
 }
 
 /* Ajuste para telas pequenas */
@@ -512,6 +595,7 @@ footer a:hover {
         padding: 1rem;
         font-size: 0.85rem;
     }
+
     footer p {
         /* Permite quebra de linha se necessário */
     }
