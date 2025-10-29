@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     // --- Referências de Elementos ---
     const mainActionInput = document.getElementById('mainActionInput');
+    const mainDescriptionInput = document.getElementById('mainDescriptionInput');
     const templateSelector = document.getElementById('templateSelector'); // Mantido para contexto opcional
     const advancedOptionsContainer = document.getElementById('advanced-options-container'); // Mantido
     const ticketNumberInput = document.getElementById('ticketNumberInput');
@@ -19,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function loadTemplates() {
         const savedTemplates = localStorage.getItem(STORAGE_KEY);
         if (!savedTemplates || Object.keys(JSON.parse(savedTemplates)).length === 0) {
-            setDefaultTemplates(); // Chama a função para definir os padrões
+            setDefaultTemplates();
         } else {
              try {
                 templates = JSON.parse(savedTemplates);
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
             instalacaoEstacao: "Contexto: Instalação/Configuração de Estação (Física)",
             configRamal: "Contexto: Configuração de Ramal",
             solicitacaoEquipamento: "Contexto: Solicitação de Equipamento",
-            atendimentoGenerico: "Contexto: Atendimento Geral" // Nome mais claro
+            atendimentoGenerico: "Contexto: Atendimento Geral"
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(templates));
     }
@@ -61,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const option = document.createElement('option');
             option.value = key;
             const labelText = templates[key].startsWith("Contexto: ") ? templates[key].substring(10) : key;
-            option.textContent = labelText; // Exibe o nome amigável
+            option.textContent = labelText; 
             templateSelector.appendChild(option);
         }
     }
@@ -90,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
         outputScript.value = 'Processando com IA...';
         outputScript.readOnly = true;
         outputScript.classList.remove('error-output');
-        showFeedback('A Inteligência Artificial está trabalhando...', 'success');
+        showFeedback('A IA está trabalhando...', 'success');
 
         const contextKey = templateSelector.value;
         const contextText = contextKey ? templates[contextKey] : "Nenhum contexto específico selecionado";
@@ -98,7 +99,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const details = {
             ticketNumber: ticketNumberInput.value.trim(),
             requester: requesterInput.value.trim(),
-            department: departmentInput.value.trim()
+            department: departmentInput.value.trim(),
+            mainDescriptionInput: mainDescriptionInput.value.trim()
         };
 
         gerarRegistroTecnico(mainAction, details, contextText);
@@ -126,6 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 - Nº Chamado: ${details.ticketNumber || ''}
                 - Solicitante: ${details.requester || ''}
                 - Departamento: ${details.department || ''}
+                - Descrição do Chamado: ${details.mainDescriptionInput || ''}
 
             3.  **CONTEXTO/ASSUNTO GERAL (Opcional):** ${contextText}
 
@@ -137,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
             * **Conciso:** Evite informações redundantes. O registro é um resumo factual.
             * **Assinatura:** **Obrigatório** incluir a assinatura completa no final, exatamente como especificado acima.
             * **Saída:** Gere APENAS o texto do registro técnico + assinatura. Sem títulos ou metatexto.
+            * * ** Obs: Se a resposta for qualquer outra coisa fora do padrãa, assuntos paralelos, duvidas ou algo que não seja um registro de TI, Gere a resposta: "Sou uma IA contratada apenas para criar registros de TI. Me ajude a te ajudar! :) ".
         `;
         // --- FIM DO NOVO PROMPT ---
 
